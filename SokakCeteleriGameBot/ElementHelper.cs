@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace SokakCeteleriGameBot
 {
@@ -30,7 +31,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindRespectElement(HtmlElement document)
+        public static HtmlElement FindRespectElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -43,7 +44,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindTopMenuElement(HtmlElement document)
+        public static HtmlElement FindTopMenuElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -56,7 +57,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindFightSearchElement(HtmlElement document)
+        public static HtmlElement FindFightSearchElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -69,7 +70,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindInventoryElement(HtmlElement document)
+        public static HtmlElement FindInventoryElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -82,7 +83,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindHomeElement(HtmlElement document)
+        public static HtmlElement FindHomeElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -95,7 +96,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindStreetElement(HtmlElement document)
+        public static HtmlElement FindStreetElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -108,7 +109,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindDrinkElement(HtmlElement document)
+        public static HtmlElement FindDrinkElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -121,7 +122,20 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindTributeElement(HtmlElement document)
+        public static HtmlElement FindDrinkCompletedElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("minfo"))
+                {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindTributeElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("table");
             foreach (HtmlElement e in elements)
@@ -134,7 +148,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
         //Çalışmnaya bilir 
-        public static HtmlElement FindQuestElement(HtmlElement document)
+        public static HtmlElement FindQuestElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("table").GetElementsByName("qListContainer");
             foreach (HtmlElement e in elements)
@@ -147,20 +161,17 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindPrisonElement(HtmlElement document)
+        public static HtmlElement FindPrisonElement(HtmlDocument document)
         {
-            var elements = document.GetElementsByTagName("form").GetElementsByName("arrested");
-            foreach (HtmlElement e in elements)
-            {
-                if (e != null)
+            var elements = document.GetElementById("arrested");
+                if (elements != null)
                 {
-                    return e;
+                    return elements;
                 }
-            }
             return null;
         }
 
-        public static HtmlElement FindHospitalElement(HtmlElement document)
+        public static HtmlElement FindHospitalElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -173,7 +184,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindTrainingContentElement(HtmlElement document)
+        public static HtmlElement FindTrainingContentElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -186,7 +197,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindGangHomeElement(HtmlElement document)
+        public static HtmlElement FindGangHomeElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
@@ -199,7 +210,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindGangQuestElement(HtmlElement document)
+        public static HtmlElement FindGangQuestElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("table");
             foreach (HtmlElement e in elements)
@@ -212,7 +223,7 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindGangCrimeElement(HtmlElement document)
+        public static HtmlElement FindGangCrimeElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)

@@ -29,6 +29,20 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbBaglanti = new System.Windows.Forms.Label();
+            this.lbCazibePuan = new System.Windows.Forms.Label();
+            this.lbGucPuan = new System.Windows.Forms.Label();
+            this.lbZekaPuan = new System.Windows.Forms.Label();
+            this.lbSavasPuan = new System.Windows.Forms.Label();
+            this.lbAtak = new System.Windows.Forms.Label();
+            this.lbPara = new System.Windows.Forms.Label();
+            this.lbSaygi = new System.Windows.Forms.Label();
+            this.lbSeviye = new System.Windows.Forms.Label();
+            this.lbCazibe = new System.Windows.Forms.Label();
+            this.lbGuc = new System.Windows.Forms.Label();
+            this.lbZeka = new System.Windows.Forms.Label();
+            this.cbHapisKart = new System.Windows.Forms.CheckBox();
+            this.cbHastaneKart = new System.Windows.Forms.CheckBox();
             this.lbZehir = new System.Windows.Forms.Label();
             this.lbRisk = new System.Windows.Forms.Label();
             this.lbEnerji = new System.Windows.Forms.Label();
@@ -39,25 +53,18 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.startPanel = new System.Windows.Forms.Panel();
-            this.cbHastaneKart = new System.Windows.Forms.CheckBox();
-            this.cbHapisKart = new System.Windows.Forms.CheckBox();
-            this.lbCazibe = new System.Windows.Forms.Label();
-            this.lbGuc = new System.Windows.Forms.Label();
-            this.lbZeka = new System.Windows.Forms.Label();
-            this.lbAtak = new System.Windows.Forms.Label();
-            this.lbPara = new System.Windows.Forms.Label();
-            this.lbSaygi = new System.Windows.Forms.Label();
-            this.lbSeviye = new System.Windows.Forms.Label();
-            this.lbCazibePuan = new System.Windows.Forms.Label();
-            this.lbGucPuan = new System.Windows.Forms.Label();
-            this.lbZekaPuan = new System.Windows.Forms.Label();
-            this.lbSavasPuan = new System.Windows.Forms.Label();
+            this.btnAntreman = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.panel1.SuspendLayout();
             this.startPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.btnAntreman);
+            this.panel1.Controls.Add(this.lbBaglanti);
             this.panel1.Controls.Add(this.lbCazibePuan);
             this.panel1.Controls.Add(this.lbGucPuan);
             this.panel1.Controls.Add(this.lbZekaPuan);
@@ -81,6 +88,146 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1405, 122);
             this.panel1.TabIndex = 0;
+            // 
+            // lbBaglanti
+            // 
+            this.lbBaglanti.AutoSize = true;
+            this.lbBaglanti.Location = new System.Drawing.Point(83, 99);
+            this.lbBaglanti.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbBaglanti.Name = "lbBaglanti";
+            this.lbBaglanti.Size = new System.Drawing.Size(54, 13);
+            this.lbBaglanti.TabIndex = 15;
+            this.lbBaglanti.Text = "Bağlantı : ";
+            // 
+            // lbCazibePuan
+            // 
+            this.lbCazibePuan.AutoSize = true;
+            this.lbCazibePuan.Location = new System.Drawing.Point(273, 76);
+            this.lbCazibePuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbCazibePuan.Name = "lbCazibePuan";
+            this.lbCazibePuan.Size = new System.Drawing.Size(78, 13);
+            this.lbCazibePuan.TabIndex = 11;
+            this.lbCazibePuan.Text = "Cazibe Puanı : ";
+            // 
+            // lbGucPuan
+            // 
+            this.lbGucPuan.AutoSize = true;
+            this.lbGucPuan.Location = new System.Drawing.Point(273, 56);
+            this.lbGucPuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbGucPuan.Name = "lbGucPuan";
+            this.lbGucPuan.Size = new System.Drawing.Size(66, 13);
+            this.lbGucPuan.TabIndex = 12;
+            this.lbGucPuan.Text = "Güç Puanı : ";
+            // 
+            // lbZekaPuan
+            // 
+            this.lbZekaPuan.AutoSize = true;
+            this.lbZekaPuan.Location = new System.Drawing.Point(273, 35);
+            this.lbZekaPuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbZekaPuan.Name = "lbZekaPuan";
+            this.lbZekaPuan.Size = new System.Drawing.Size(71, 13);
+            this.lbZekaPuan.TabIndex = 13;
+            this.lbZekaPuan.Text = "Zeka Puanı : ";
+            // 
+            // lbSavasPuan
+            // 
+            this.lbSavasPuan.AutoSize = true;
+            this.lbSavasPuan.Location = new System.Drawing.Point(273, 15);
+            this.lbSavasPuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbSavasPuan.Name = "lbSavasPuan";
+            this.lbSavasPuan.Size = new System.Drawing.Size(76, 13);
+            this.lbSavasPuan.TabIndex = 14;
+            this.lbSavasPuan.Text = "Savaş Puanı : ";
+            // 
+            // lbAtak
+            // 
+            this.lbAtak.AutoSize = true;
+            this.lbAtak.Location = new System.Drawing.Point(83, 77);
+            this.lbAtak.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbAtak.Name = "lbAtak";
+            this.lbAtak.Size = new System.Drawing.Size(38, 13);
+            this.lbAtak.TabIndex = 7;
+            this.lbAtak.Text = "Atak : ";
+            // 
+            // lbPara
+            // 
+            this.lbPara.AutoSize = true;
+            this.lbPara.Location = new System.Drawing.Point(83, 57);
+            this.lbPara.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbPara.Name = "lbPara";
+            this.lbPara.Size = new System.Drawing.Size(38, 13);
+            this.lbPara.TabIndex = 8;
+            this.lbPara.Text = "Para : ";
+            // 
+            // lbSaygi
+            // 
+            this.lbSaygi.AutoSize = true;
+            this.lbSaygi.Location = new System.Drawing.Point(83, 36);
+            this.lbSaygi.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbSaygi.Name = "lbSaygi";
+            this.lbSaygi.Size = new System.Drawing.Size(42, 13);
+            this.lbSaygi.TabIndex = 9;
+            this.lbSaygi.Text = "Saygı : ";
+            // 
+            // lbSeviye
+            // 
+            this.lbSeviye.AutoSize = true;
+            this.lbSeviye.Location = new System.Drawing.Point(83, 16);
+            this.lbSeviye.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbSeviye.Name = "lbSeviye";
+            this.lbSeviye.Size = new System.Drawing.Size(48, 13);
+            this.lbSeviye.TabIndex = 10;
+            this.lbSeviye.Text = "Seviye : ";
+            // 
+            // lbCazibe
+            // 
+            this.lbCazibe.AutoSize = true;
+            this.lbCazibe.Location = new System.Drawing.Point(191, 56);
+            this.lbCazibe.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbCazibe.Name = "lbCazibe";
+            this.lbCazibe.Size = new System.Drawing.Size(48, 13);
+            this.lbCazibe.TabIndex = 4;
+            this.lbCazibe.Text = "Cazibe : ";
+            // 
+            // lbGuc
+            // 
+            this.lbGuc.AutoSize = true;
+            this.lbGuc.Location = new System.Drawing.Point(191, 35);
+            this.lbGuc.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbGuc.Name = "lbGuc";
+            this.lbGuc.Size = new System.Drawing.Size(36, 13);
+            this.lbGuc.TabIndex = 5;
+            this.lbGuc.Text = "Güç : ";
+            // 
+            // lbZeka
+            // 
+            this.lbZeka.AutoSize = true;
+            this.lbZeka.Location = new System.Drawing.Point(191, 15);
+            this.lbZeka.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbZeka.Name = "lbZeka";
+            this.lbZeka.Size = new System.Drawing.Size(41, 13);
+            this.lbZeka.TabIndex = 6;
+            this.lbZeka.Text = "Zeka : ";
+            // 
+            // cbHapisKart
+            // 
+            this.cbHapisKart.AutoSize = true;
+            this.cbHapisKart.Location = new System.Drawing.Point(371, 39);
+            this.cbHapisKart.Name = "cbHapisKart";
+            this.cbHapisKart.Size = new System.Drawing.Size(116, 17);
+            this.cbHapisKart.TabIndex = 2;
+            this.cbHapisKart.Text = "Hapiste Kart Kullan";
+            this.cbHapisKart.UseVisualStyleBackColor = true;
+            // 
+            // cbHastaneKart
+            // 
+            this.cbHastaneKart.AutoSize = true;
+            this.cbHastaneKart.Location = new System.Drawing.Point(371, 15);
+            this.cbHastaneKart.Name = "cbHastaneKart";
+            this.cbHastaneKart.Size = new System.Drawing.Size(132, 17);
+            this.cbHastaneKart.TabIndex = 1;
+            this.cbHastaneKart.Text = "Hastanede Kart Kullan";
+            this.cbHastaneKart.UseVisualStyleBackColor = true;
             // 
             // lbZehir
             // 
@@ -182,146 +329,49 @@
             this.startPanel.Size = new System.Drawing.Size(233, 89);
             this.startPanel.TabIndex = 4;
             // 
-            // cbHastaneKart
+            // btnAntreman
             // 
-            this.cbHastaneKart.AutoSize = true;
-            this.cbHastaneKart.Location = new System.Drawing.Point(371, 15);
-            this.cbHastaneKart.Name = "cbHastaneKart";
-            this.cbHastaneKart.Size = new System.Drawing.Size(132, 17);
-            this.cbHastaneKart.TabIndex = 1;
-            this.cbHastaneKart.Text = "Hastanede Kart Kullan";
-            this.cbHastaneKart.UseVisualStyleBackColor = true;
+            this.btnAntreman.Location = new System.Drawing.Point(508, 9);
+            this.btnAntreman.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAntreman.Name = "btnAntreman";
+            this.btnAntreman.Size = new System.Drawing.Size(89, 27);
+            this.btnAntreman.TabIndex = 4;
+            this.btnAntreman.Text = "Antreman";
+            this.btnAntreman.UseVisualStyleBackColor = true;
+            this.btnAntreman.Click += new System.EventHandler(this.btnAntreman_Click);
             // 
-            // cbHapisKart
+            // button2
             // 
-            this.cbHapisKart.AutoSize = true;
-            this.cbHapisKart.Location = new System.Drawing.Point(371, 39);
-            this.cbHapisKart.Name = "cbHapisKart";
-            this.cbHapisKart.Size = new System.Drawing.Size(116, 17);
-            this.cbHapisKart.TabIndex = 2;
-            this.cbHapisKart.Text = "Hapiste Kart Kullan";
-            this.cbHapisKart.UseVisualStyleBackColor = true;
+            this.button2.Location = new System.Drawing.Point(624, 15);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(89, 27);
+            this.button2.TabIndex = 16;
+            this.button2.Text = "ara";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // lbCazibe
+            // webBrowser1
             // 
-            this.lbCazibe.AutoSize = true;
-            this.lbCazibe.Location = new System.Drawing.Point(174, 57);
-            this.lbCazibe.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbCazibe.Name = "lbCazibe";
-            this.lbCazibe.Size = new System.Drawing.Size(48, 13);
-            this.lbCazibe.TabIndex = 4;
-            this.lbCazibe.Text = "Cazibe : ";
-            // 
-            // lbGuc
-            // 
-            this.lbGuc.AutoSize = true;
-            this.lbGuc.Location = new System.Drawing.Point(174, 36);
-            this.lbGuc.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbGuc.Name = "lbGuc";
-            this.lbGuc.Size = new System.Drawing.Size(36, 13);
-            this.lbGuc.TabIndex = 5;
-            this.lbGuc.Text = "Güç : ";
-            // 
-            // lbZeka
-            // 
-            this.lbZeka.AutoSize = true;
-            this.lbZeka.Location = new System.Drawing.Point(174, 16);
-            this.lbZeka.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbZeka.Name = "lbZeka";
-            this.lbZeka.Size = new System.Drawing.Size(41, 13);
-            this.lbZeka.TabIndex = 6;
-            this.lbZeka.Text = "Zeka : ";
-            // 
-            // lbAtak
-            // 
-            this.lbAtak.AutoSize = true;
-            this.lbAtak.Location = new System.Drawing.Point(83, 77);
-            this.lbAtak.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbAtak.Name = "lbAtak";
-            this.lbAtak.Size = new System.Drawing.Size(38, 13);
-            this.lbAtak.TabIndex = 7;
-            this.lbAtak.Text = "Atak : ";
-            // 
-            // lbPara
-            // 
-            this.lbPara.AutoSize = true;
-            this.lbPara.Location = new System.Drawing.Point(83, 57);
-            this.lbPara.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbPara.Name = "lbPara";
-            this.lbPara.Size = new System.Drawing.Size(38, 13);
-            this.lbPara.TabIndex = 8;
-            this.lbPara.Text = "Para : ";
-            // 
-            // lbSaygi
-            // 
-            this.lbSaygi.AutoSize = true;
-            this.lbSaygi.Location = new System.Drawing.Point(83, 36);
-            this.lbSaygi.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbSaygi.Name = "lbSaygi";
-            this.lbSaygi.Size = new System.Drawing.Size(42, 13);
-            this.lbSaygi.TabIndex = 9;
-            this.lbSaygi.Text = "Saygı : ";
-            // 
-            // lbSeviye
-            // 
-            this.lbSeviye.AutoSize = true;
-            this.lbSeviye.Location = new System.Drawing.Point(83, 16);
-            this.lbSeviye.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbSeviye.Name = "lbSeviye";
-            this.lbSeviye.Size = new System.Drawing.Size(48, 13);
-            this.lbSeviye.TabIndex = 10;
-            this.lbSeviye.Text = "Seviye : ";
-            // 
-            // lbCazibePuan
-            // 
-            this.lbCazibePuan.AutoSize = true;
-            this.lbCazibePuan.Location = new System.Drawing.Point(256, 77);
-            this.lbCazibePuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbCazibePuan.Name = "lbCazibePuan";
-            this.lbCazibePuan.Size = new System.Drawing.Size(78, 13);
-            this.lbCazibePuan.TabIndex = 11;
-            this.lbCazibePuan.Text = "Cazibe Puanı : ";
-            // 
-            // lbGucPuan
-            // 
-            this.lbGucPuan.AutoSize = true;
-            this.lbGucPuan.Location = new System.Drawing.Point(256, 57);
-            this.lbGucPuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbGucPuan.Name = "lbGucPuan";
-            this.lbGucPuan.Size = new System.Drawing.Size(66, 13);
-            this.lbGucPuan.TabIndex = 12;
-            this.lbGucPuan.Text = "Güç Puanı : ";
-            // 
-            // lbZekaPuan
-            // 
-            this.lbZekaPuan.AutoSize = true;
-            this.lbZekaPuan.Location = new System.Drawing.Point(256, 36);
-            this.lbZekaPuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbZekaPuan.Name = "lbZekaPuan";
-            this.lbZekaPuan.Size = new System.Drawing.Size(71, 13);
-            this.lbZekaPuan.TabIndex = 13;
-            this.lbZekaPuan.Text = "Zeka Puanı : ";
-            // 
-            // lbSavasPuan
-            // 
-            this.lbSavasPuan.AutoSize = true;
-            this.lbSavasPuan.Location = new System.Drawing.Point(256, 16);
-            this.lbSavasPuan.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbSavasPuan.Name = "lbSavasPuan";
-            this.lbSavasPuan.Size = new System.Drawing.Size(76, 13);
-            this.lbSavasPuan.TabIndex = 14;
-            this.lbSavasPuan.Text = "Savaş Puanı : ";
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Location = new System.Drawing.Point(0, 122);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(1405, 630);
+            this.webBrowser1.TabIndex = 5;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1405, 752);
+            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.startPanel);
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.startPanel.ResumeLayout(false);
@@ -356,6 +406,10 @@
         private System.Windows.Forms.Label lbZeka;
         private System.Windows.Forms.CheckBox cbHapisKart;
         private System.Windows.Forms.CheckBox cbHastaneKart;
+        private System.Windows.Forms.Label lbBaglanti;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnAntreman;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
 
