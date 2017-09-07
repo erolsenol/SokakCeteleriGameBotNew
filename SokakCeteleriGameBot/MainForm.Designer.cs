@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.lbMinSeviye = new System.Windows.Forms.Label();
+            this.tbMinSeviye = new System.Windows.Forms.TextBox();
+            this.btnSavas = new System.Windows.Forms.Button();
+            this.btnAntreman = new System.Windows.Forms.Button();
             this.lbBaglanti = new System.Windows.Forms.Label();
             this.lbCazibePuan = new System.Windows.Forms.Label();
             this.lbGucPuan = new System.Windows.Forms.Label();
@@ -53,16 +58,19 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.startPanel = new System.Windows.Forms.Panel();
-            this.btnAntreman = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.lbdovulen = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.startPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.lbdovulen);
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.lbMinSeviye);
+            this.panel1.Controls.Add(this.tbMinSeviye);
+            this.panel1.Controls.Add(this.btnSavas);
             this.panel1.Controls.Add(this.btnAntreman);
             this.panel1.Controls.Add(this.lbBaglanti);
             this.panel1.Controls.Add(this.lbCazibePuan);
@@ -88,6 +96,56 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1405, 122);
             this.panel1.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(545, 76);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(110, 36);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "Savaş";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // lbMinSeviye
+            // 
+            this.lbMinSeviye.AutoSize = true;
+            this.lbMinSeviye.Location = new System.Drawing.Point(368, 65);
+            this.lbMinSeviye.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbMinSeviye.Name = "lbMinSeviye";
+            this.lbMinSeviye.Size = new System.Drawing.Size(65, 13);
+            this.lbMinSeviye.TabIndex = 18;
+            this.lbMinSeviye.Text = "Min Seviye -";
+            // 
+            // tbMinSeviye
+            // 
+            this.tbMinSeviye.Location = new System.Drawing.Point(434, 62);
+            this.tbMinSeviye.Name = "tbMinSeviye";
+            this.tbMinSeviye.Size = new System.Drawing.Size(69, 20);
+            this.tbMinSeviye.TabIndex = 17;
+            // 
+            // btnSavas
+            // 
+            this.btnSavas.Location = new System.Drawing.Point(601, 8);
+            this.btnSavas.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSavas.Name = "btnSavas";
+            this.btnSavas.Size = new System.Drawing.Size(89, 27);
+            this.btnSavas.TabIndex = 16;
+            this.btnSavas.Text = "Savaş";
+            this.btnSavas.UseVisualStyleBackColor = true;
+            this.btnSavas.Click += new System.EventHandler(this.btnSavas_Click);
+            // 
+            // btnAntreman
+            // 
+            this.btnAntreman.Location = new System.Drawing.Point(508, 9);
+            this.btnAntreman.Margin = new System.Windows.Forms.Padding(2);
+            this.btnAntreman.Name = "btnAntreman";
+            this.btnAntreman.Size = new System.Drawing.Size(89, 27);
+            this.btnAntreman.TabIndex = 4;
+            this.btnAntreman.Text = "Antreman";
+            this.btnAntreman.UseVisualStyleBackColor = true;
+            this.btnAntreman.Click += new System.EventHandler(this.btnAntreman_Click);
             // 
             // lbBaglanti
             // 
@@ -329,28 +387,6 @@
             this.startPanel.Size = new System.Drawing.Size(233, 89);
             this.startPanel.TabIndex = 4;
             // 
-            // btnAntreman
-            // 
-            this.btnAntreman.Location = new System.Drawing.Point(508, 9);
-            this.btnAntreman.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAntreman.Name = "btnAntreman";
-            this.btnAntreman.Size = new System.Drawing.Size(89, 27);
-            this.btnAntreman.TabIndex = 4;
-            this.btnAntreman.Text = "Antreman";
-            this.btnAntreman.UseVisualStyleBackColor = true;
-            this.btnAntreman.Click += new System.EventHandler(this.btnAntreman_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(624, 15);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(89, 27);
-            this.button2.TabIndex = 16;
-            this.button2.Text = "ara";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // webBrowser1
             // 
             this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -359,6 +395,15 @@
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.Size = new System.Drawing.Size(1405, 630);
             this.webBrowser1.TabIndex = 5;
+            // 
+            // lbdovulen
+            // 
+            this.lbdovulen.AutoSize = true;
+            this.lbdovulen.Location = new System.Drawing.Point(371, 82);
+            this.lbdovulen.Name = "lbdovulen";
+            this.lbdovulen.Size = new System.Drawing.Size(56, 13);
+            this.lbdovulen.TabIndex = 20;
+            this.lbdovulen.Text = "Dövülen : ";
             // 
             // MainForm
             // 
@@ -370,6 +415,7 @@
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel1.ResumeLayout(false);
@@ -407,9 +453,13 @@
         private System.Windows.Forms.CheckBox cbHapisKart;
         private System.Windows.Forms.CheckBox cbHastaneKart;
         private System.Windows.Forms.Label lbBaglanti;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnSavas;
         private System.Windows.Forms.Button btnAntreman;
         private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.Label lbMinSeviye;
+        private System.Windows.Forms.TextBox tbMinSeviye;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label lbdovulen;
     }
 }
 

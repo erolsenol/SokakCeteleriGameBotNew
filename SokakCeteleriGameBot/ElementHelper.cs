@@ -11,9 +11,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("user-properties"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
@@ -24,73 +22,68 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("b-links"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
 
-        public static HtmlElement FindRespectElement(HtmlDocument document)
+        public static HtmlElement FindLeftTrainingElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("b-left-links"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
 
-        public static HtmlElement FindTopMenuElement(HtmlDocument document)
+        public static HtmlElement FindRightTrainingElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
             {
-                if (e.GetAttribute("className").Contains("local-tasks"))
-                {
-                    return e;
-                }
+                if (e.GetAttribute("className").Contains("b-right-links"))
+                {return e;}
+            }
+            return null;
+        }
+
+        public static HtmlElement FindTrainingCompletedElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("padded"))
+                {return e;}
             }
             return null;
         }
 
         public static HtmlElement FindFightSearchElement(HtmlDocument document)
         {
-            var elements = document.GetElementsByTagName("div");
-            foreach (HtmlElement e in elements)
+            var elements = document.GetElementById("matchmaker");
+           // foreach (HtmlElement e in elements)
             {
-                if (e.GetAttribute("className").Contains("body fight-finder modfaderacket fight-finder-enhanced"))
-                {
-                    return e;
-                }
+                if (elements != null)
+                { return elements; }
             }
             return null;
         }
 
-        public static HtmlElement FindInventoryElement(HtmlDocument document)
+        public static HtmlElement FindFightCompletedElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
             {
-                if (e.GetAttribute("className").Contains("usrtools"))
+                if (e.GetAttribute("className").Contains("profile_panel inline-block  width-260"))
                 {
-                    return e;
-                }
-            }
-            return null;
-        }
-
-        public static HtmlElement FindHomeElement(HtmlDocument document)
-        {
-            var elements = document.GetElementsByTagName("div");
-            foreach (HtmlElement e in elements)
-            {
-                if (e.GetAttribute("className").Contains("main-menu"))
-                {
-                    return e;
+                    var hangisi = e.GetElementsByTagName("a");
+                    foreach (HtmlElement a in hangisi)
+                    {
+                        if (a.GetAttribute("className").Contains("beat btn"))
+                        {return a;}
+                    }
                 }
             }
             return null;
@@ -102,35 +95,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("private-map-10 my-map"))
-                {
-                    return e;
-                }
-            }
-            return null;
-        }
-
-        public static HtmlElement FindDrinkElement(HtmlDocument document)
-        {
-            var elements = document.GetElementsByTagName("div");
-            foreach (HtmlElement e in elements)
-            {
-                if (e.GetAttribute("className").Contains("inventory_slotsw"))
-                {
-                    return e;
-                }
-            }
-            return null;
-        }
-
-        public static HtmlElement FindDrinkCompletedElement(HtmlDocument document)
-        {
-            var elements = document.GetElementsByTagName("div");
-            foreach (HtmlElement e in elements)
-            {
-                if (e.GetAttribute("className").Contains("minfo"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
@@ -141,9 +106,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("default"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
@@ -154,9 +117,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e != null)
-                {
-                    return e.Children[0];
-                }
+                {return e.Children[0];}
             }
             return null;
         }
@@ -165,9 +126,7 @@ namespace SokakCeteleriGameBot
         {
             var elements = document.GetElementById("arrested");
                 if (elements != null)
-                {
-                    return elements;
-                }
+                {return elements;}
             return null;
         }
 
@@ -177,9 +136,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("modhospital"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
@@ -190,9 +147,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("training_content"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
@@ -203,9 +158,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("body  mygang"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
@@ -216,9 +169,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("gcrime_list"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
@@ -229,9 +180,7 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("className").Contains("body"))
-                {
-                    return e;
-                }
+                {return e;}
             }
             return null;
         }
