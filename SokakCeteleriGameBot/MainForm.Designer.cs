@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cbHapisBaglanti = new System.Windows.Forms.CheckBox();
+            this.lbdovulen = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.lbMinSeviye = new System.Windows.Forms.Label();
             this.tbMinSeviye = new System.Windows.Forms.TextBox();
@@ -59,13 +61,17 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.startPanel = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.lbdovulen = new System.Windows.Forms.Label();
+            this.cbPolisNoPara = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.startPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.cbPolisNoPara);
+            this.panel1.Controls.Add(this.cbHapisBaglanti);
             this.panel1.Controls.Add(this.lbdovulen);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.lbMinSeviye);
@@ -97,12 +103,32 @@
             this.panel1.Size = new System.Drawing.Size(1405, 122);
             this.panel1.TabIndex = 0;
             // 
+            // cbHapisBaglanti
+            // 
+            this.cbHapisBaglanti.AutoSize = true;
+            this.cbHapisBaglanti.Location = new System.Drawing.Point(371, 16);
+            this.cbHapisBaglanti.Name = "cbHapisBaglanti";
+            this.cbHapisBaglanti.Size = new System.Drawing.Size(135, 17);
+            this.cbHapisBaglanti.TabIndex = 21;
+            this.cbHapisBaglanti.Text = "Hapiste Bağlantı Kullan";
+            this.cbHapisBaglanti.UseVisualStyleBackColor = true;
+            this.cbHapisBaglanti.CheckedChanged += new System.EventHandler(this.cbHapisBaglanti_CheckedChanged);
+            // 
+            // lbdovulen
+            // 
+            this.lbdovulen.AutoSize = true;
+            this.lbdovulen.Location = new System.Drawing.Point(371, 105);
+            this.lbdovulen.Name = "lbdovulen";
+            this.lbdovulen.Size = new System.Drawing.Size(56, 13);
+            this.lbdovulen.TabIndex = 20;
+            this.lbdovulen.Text = "Dövülen : ";
+            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(545, 76);
+            this.button1.Location = new System.Drawing.Point(508, 94);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 36);
+            this.button1.Size = new System.Drawing.Size(89, 27);
             this.button1.TabIndex = 19;
             this.button1.Text = "Savaş";
             this.button1.UseVisualStyleBackColor = true;
@@ -111,7 +137,7 @@
             // lbMinSeviye
             // 
             this.lbMinSeviye.AutoSize = true;
-            this.lbMinSeviye.Location = new System.Drawing.Point(368, 65);
+            this.lbMinSeviye.Location = new System.Drawing.Point(368, 88);
             this.lbMinSeviye.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbMinSeviye.Name = "lbMinSeviye";
             this.lbMinSeviye.Size = new System.Drawing.Size(65, 13);
@@ -120,25 +146,25 @@
             // 
             // tbMinSeviye
             // 
-            this.tbMinSeviye.Location = new System.Drawing.Point(434, 62);
+            this.tbMinSeviye.Location = new System.Drawing.Point(434, 85);
             this.tbMinSeviye.Name = "tbMinSeviye";
             this.tbMinSeviye.Size = new System.Drawing.Size(69, 20);
             this.tbMinSeviye.TabIndex = 17;
             // 
             // btnSavas
             // 
-            this.btnSavas.Location = new System.Drawing.Point(601, 8);
+            this.btnSavas.Location = new System.Drawing.Point(508, 32);
             this.btnSavas.Margin = new System.Windows.Forms.Padding(2);
             this.btnSavas.Name = "btnSavas";
             this.btnSavas.Size = new System.Drawing.Size(89, 27);
             this.btnSavas.TabIndex = 16;
-            this.btnSavas.Text = "Savaş";
+            this.btnSavas.Text = "Bot Start";
             this.btnSavas.UseVisualStyleBackColor = true;
             this.btnSavas.Click += new System.EventHandler(this.btnSavas_Click);
             // 
             // btnAntreman
             // 
-            this.btnAntreman.Location = new System.Drawing.Point(508, 9);
+            this.btnAntreman.Location = new System.Drawing.Point(508, 1);
             this.btnAntreman.Margin = new System.Windows.Forms.Padding(2);
             this.btnAntreman.Name = "btnAntreman";
             this.btnAntreman.Size = new System.Drawing.Size(89, 27);
@@ -270,17 +296,18 @@
             // cbHapisKart
             // 
             this.cbHapisKart.AutoSize = true;
-            this.cbHapisKart.Location = new System.Drawing.Point(371, 39);
+            this.cbHapisKart.Location = new System.Drawing.Point(371, 0);
             this.cbHapisKart.Name = "cbHapisKart";
             this.cbHapisKart.Size = new System.Drawing.Size(116, 17);
             this.cbHapisKart.TabIndex = 2;
             this.cbHapisKart.Text = "Hapiste Kart Kullan";
             this.cbHapisKart.UseVisualStyleBackColor = true;
+            this.cbHapisKart.CheckedChanged += new System.EventHandler(this.cbHapisKart_CheckedChanged);
             // 
             // cbHastaneKart
             // 
             this.cbHastaneKart.AutoSize = true;
-            this.cbHastaneKart.Location = new System.Drawing.Point(371, 15);
+            this.cbHastaneKart.Location = new System.Drawing.Point(371, 62);
             this.cbHastaneKart.Name = "cbHastaneKart";
             this.cbHastaneKart.Size = new System.Drawing.Size(132, 17);
             this.cbHastaneKart.TabIndex = 1;
@@ -396,14 +423,26 @@
             this.webBrowser1.Size = new System.Drawing.Size(1405, 630);
             this.webBrowser1.TabIndex = 5;
             // 
-            // lbdovulen
+            // cbPolisNoPara
             // 
-            this.lbdovulen.AutoSize = true;
-            this.lbdovulen.Location = new System.Drawing.Point(371, 82);
-            this.lbdovulen.Name = "lbdovulen";
-            this.lbdovulen.Size = new System.Drawing.Size(56, 13);
-            this.lbdovulen.TabIndex = 20;
-            this.lbdovulen.Text = "Dövülen : ";
+            this.cbPolisNoPara.AutoSize = true;
+            this.cbPolisNoPara.Location = new System.Drawing.Point(371, 32);
+            this.cbPolisNoPara.Name = "cbPolisNoPara";
+            this.cbPolisNoPara.Size = new System.Drawing.Size(136, 17);
+            this.cbPolisNoPara.TabIndex = 22;
+            this.cbPolisNoPara.Text = "Rüşvette Para Teklif Et";
+            this.cbPolisNoPara.UseVisualStyleBackColor = true;
+            this.cbPolisNoPara.CheckedChanged += new System.EventHandler(this.cbPolisNoPara_CheckedChanged);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(508, 63);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(89, 27);
+            this.button2.TabIndex = 23;
+            this.button2.Text = "Haraç Topla";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -460,6 +499,9 @@
         private System.Windows.Forms.TextBox tbMinSeviye;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label lbdovulen;
+        private System.Windows.Forms.CheckBox cbHapisBaglanti;
+        private System.Windows.Forms.CheckBox cbPolisNoPara;
+        private System.Windows.Forms.Button button2;
     }
 }
 

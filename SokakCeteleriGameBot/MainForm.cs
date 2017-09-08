@@ -7,7 +7,7 @@ namespace SokakCeteleriGameBot
     public partial class MainForm : Form
     {
         readonly WebBrowser _webBrowser;
-        bool _isPageLoaded, _enerjiDurum;
+        bool _isPageLoaded, _enerjiDurum, _hapisKacKart, _hapisKacBaglanti, _rusvetNoPara;
         bool _isLoggedIn;
 
         private GameOps _game = GameOps.Non;
@@ -28,6 +28,31 @@ namespace SokakCeteleriGameBot
             { _minSeviye = 5; }
             Savas(_webBrowser.Document);
         }
+
+        private void cbHapisKart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbHapisKart.Checked)
+            { _hapisKacKart = true;}
+            else
+            { _hapisKacKart = false;}
+        }
+
+        private void cbPolisNoPara_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbPolisNoPara.Checked)
+            { _rusvetNoPara = true; }
+            else
+            { _rusvetNoPara = false; }
+        }
+
+        private void cbHapisBaglanti_CheckedChanged(object sender, EventArgs e)
+        {
+                if (cbHapisBaglanti.Checked)
+            { _hapisKacBaglanti = true; }
+            else
+            { _hapisKacBaglanti = false; }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             _game = GameOps.Savas;
@@ -50,6 +75,8 @@ namespace SokakCeteleriGameBot
 
         private void btnAntreman_Click(object sender, EventArgs e)
         {
+            _webBrowser.Navigate("http://sokakceteleri.com/");
+            _webBrowser.DocumentCompleted += _webBrowser_DocumentCompleted;
             _game = GameOps.Antrenman;
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
@@ -75,9 +102,6 @@ namespace SokakCeteleriGameBot
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _webBrowser.Navigate("http://sokakceteleri.com/");
-            _webBrowser.DocumentCompleted += _webBrowser_DocumentCompleted;
-
             webBrowser1.Navigate("http://sokakceteleri.com/");
             webBrowser1.DocumentCompleted += WebBrowser1_DocumentCompleted;
         }
@@ -289,6 +313,7 @@ namespace SokakCeteleriGameBot
         private void Antrenman(HtmlDocument document)
         {
             if (document == null) return;
+            if (_enerji < 40) { _enerjiDurum = false; }
             if (!_enerjiDurum)
             {
                 var findDrink = EnerjiElement.FindDrinkElement(document);
@@ -364,7 +389,53 @@ namespace SokakCeteleriGameBot
         private void Savas(HtmlDocument document)
         {
             if (document == null) return;
-            if (_enerji < 60){ _enerjiDurum = false; }
+            var prison = ElementHelper.FindPrisonElement(document);
+            if (prison != null)
+            {
+                if (_hapisKacKart && Convert.ToInt16(prison.Children[0].Children[2].Children[0].Children[0].
+                    Children[0].Children[0].Children[1].InnerText) > 0)
+                {
+                    prison.Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                }
+                else if (_hapisKacBaglanti && _baglanti >= 78)
+                {
+                    prison.Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                }
+                else
+                {
+                    prison.Children[0].Children[3].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                }
+                var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
+                if (escapeConnect != null)
+                {
+                    escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
+                        Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click");return;
+                }
+            }
+            var police = ElementHelper.FindPoliceElement(document);
+            if (police != null)
+            {
+                if (_rusvetNoPara)
+                {
+                    int rusvet1 = Convert.ToInt16(police.Children[1].Children[0].GetAttribute("value").
+                                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[1].Children[0].
+                                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet1)
+                    { police.Children[1].Children[0].InvokeMember("click"); return; }
+                    int rusvet2 = Convert.ToInt16(police.Children[2].Children[0].GetAttribute("value").
+                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[2].Children[0].
+                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet2)
+                    { police.Children[2].Children[0].InvokeMember("click"); return; }
+                    int rusvet3 = Convert.ToInt16(police.Children[3].Children[0].GetAttribute("value").
+                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[3].Children[0].
+                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet3)
+                    { police.Children[3].Children[0].InvokeMember("click"); return; }
+                }
+                  police.Children[4].Children[0].InvokeMember("click"); return;
+            }
+            if (_enerji < 60) { _enerjiDurum = false; }
             if (!_enerjiDurum)
             {
                 var findDrink = EnerjiElement.FindDrinkElement(document);

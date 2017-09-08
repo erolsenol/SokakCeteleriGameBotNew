@@ -122,11 +122,30 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
-        public static HtmlElement FindPrisonElement(HtmlDocument document)
+        public static HtmlElement FindPoliceElement(HtmlDocument document)
         {
             var elements = document.GetElementById("arrested");
                 if (elements != null)
                 {return elements;}
+            return null;
+        }
+
+        public static HtmlElement FindPrisonElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("table");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("cellpadding").Contains("4")&& e.GetAttribute("cellspacing").Contains("0"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindEscapeConnectElement(HtmlDocument document)
+        {
+            var elements = document.GetElementById("window-modal-extra");
+            if (elements != null)
+                { return elements; }
             return null;
         }
 
