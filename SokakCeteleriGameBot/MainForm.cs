@@ -7,7 +7,7 @@ namespace SokakCeteleriGameBot
     public partial class MainForm : Form
     {
         readonly WebBrowser _webBrowser;
-        bool _isPageLoaded, _enerjiDurum, _hapisKacKart, _hapisKacBaglanti, _rusvetNoPara;
+        bool _isPageLoaded, _enerjiDurum, _hapisKacKart = true, _hapisKacBaglanti = true, _rusvetNoPara = true;
         bool _isLoggedIn;
 
         private GameOps _game = GameOps.Non;
@@ -16,18 +16,7 @@ namespace SokakCeteleriGameBot
         private int _zeka, _guc, _cazibe;
         private int _battlePoints;
 
-        private void btnSavas_Click(object sender, EventArgs e)
-        {
-            _game = GameOps.Savas;
-            if (_enerji == _enerjiToplam)
-            { _enerjiDurum = true; }
-            double odondur = 0;
-            if (double.TryParse(tbMinSeviye.Text, out odondur))
-            { _minSeviye = int.Parse(tbMinSeviye.Text); }
-            else
-            { _minSeviye = 5; }
-            Savas(_webBrowser.Document);
-        }
+        private HtmlElement elEnerji, elGuc, elZeka;
 
         private void cbHapisKart_CheckedChanged(object sender, EventArgs e)
         {
@@ -35,6 +24,14 @@ namespace SokakCeteleriGameBot
             { _hapisKacKart = true;}
             else
             { _hapisKacKart = false;}
+        }
+
+        private void cbHapisBaglanti_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbHapisBaglanti.Checked)
+            { _hapisKacBaglanti = true; }
+            else
+            { _hapisKacBaglanti = false; }
         }
 
         private void cbPolisNoPara_CheckedChanged(object sender, EventArgs e)
@@ -45,12 +42,20 @@ namespace SokakCeteleriGameBot
             { _rusvetNoPara = false; }
         }
 
-        private void cbHapisBaglanti_CheckedChanged(object sender, EventArgs e)
+        private void btnHaracTopla_Click(object sender, EventArgs e)
         {
-                if (cbHapisBaglanti.Checked)
-            { _hapisKacBaglanti = true; }
-            else
-            { _hapisKacBaglanti = false; }
+            _game = GameOps.Harac;
+            if (_enerji == _enerjiToplam)
+            { _enerjiDurum = true; }
+            HaracTopla(webBrowser1.Document);
+        }
+
+        private void btnGorev_Click(object sender, EventArgs e)
+        {
+            _game = GameOps.Gorev;
+            if (_enerji == _enerjiToplam)
+            { _enerjiDurum = true; }
+            GorevYap(webBrowser1.Document);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -63,10 +68,9 @@ namespace SokakCeteleriGameBot
             { _minSeviye = int.Parse(tbMinSeviye.Text); }
             else
             { _minSeviye = 5; }
-            Savas(webBrowser1.Document);
+            var solMenu = MenuElement.LeftMenuElement(webBrowser1.Document);
+            solMenu.Children[1].Children[0].InvokeMember("click");
         }
-
-        private HtmlElement elEnerji, elGuc, elZeka;
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -161,7 +165,7 @@ namespace SokakCeteleriGameBot
                     //Gorev
                     break;
                 case GameOps.Harac:
-                    //Harac
+                    HaracTopla(webBrowser1.Document);
                     break;
                 default:
                     break;
@@ -495,6 +499,108 @@ namespace SokakCeteleriGameBot
                 {
                     sokak.Children[1].Children[0].InvokeMember("click"); return;
                 }
+            }
+        }
+
+        private void HaracTopla(HtmlDocument document)
+        {
+            if (document == null) return;
+            if (_enerji < 10) { _enerjiDurum = false; }
+            if (!_enerjiDurum)
+            {
+                var findDrink = EnerjiElement.FindDrinkElement(document);
+                var sokak = MenuElement.LeftMenuElement(document);
+
+                if (_enerji == _enerjiToplam)
+                {
+                    _enerjiDurum = true; sokak.Children[1].Children[0].InvokeMember("click"); return;
+                }
+                else if (findDrink != null)
+                {
+                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bul)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                }
+                else
+                {
+                    elEnerji.InvokeMember("click"); ; return;
+                }
+            }
+                var harac = ElementHelper.FindTributeElement(document);
+                if (harac != null)
+                {
+                if (750 > Convert.ToInt32(harac.Children[0].Children[1].Children[6].Children[0].Children[0].InnerText))
+                    {MessageBox.Show("Haraçlar Toplandı", "Haraç", MessageBoxButtons.OK, MessageBoxIcon.Information, 
+                            MessageBoxDefaultButton.Button3, MessageBoxOptions.RtlReading);_game = GameOps.Non; return;}
+                    harac.Children[0].Children[1].Children[7].Children[0].Children[1].InvokeMember("click");return;
+                }
+                var sagMenu = MenuElement.RightMenuElement(document);
+                sagMenu.Children[2].InvokeMember("click");return;
+        }
+
+        private void GorevYap(HtmlDocument document)
+        {
+            if (document == null) return;
+            if (_enerji < 10) { _enerjiDurum = false; }
+            if (!_enerjiDurum)
+            {
+                var findDrink = EnerjiElement.FindDrinkElement(document);
+                var sokak = MenuElement.LeftMenuElement(document);
+
+                if (_enerji == _enerjiToplam)
+                {
+                    _enerjiDurum = true; sokak.Children[1].Children[0].InvokeMember("click"); return;
+                }
+                else if (findDrink != null)
+                {
+                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bul)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                }
+                else
+                {
+                    elEnerji.InvokeMember("click"); ; return;
+                }
+            }
+
+            var gorevSaldir = ElementHelper.FindQuestFightElement(document);
+            if (gorevSaldir != null)
+            {
+                elEnerji.InvokeMember("click");
+                return;
+            }
+            var gorevHazir = ElementHelper.FindQuestReadyElement(document);
+            if (gorevHazir != null)
+            {
+                var sokak = MenuElement.LeftMenuElement(document);
+                sokak.Children[1].Children[0].InvokeMember("click");return;
+            }
+            var gorevButton = ElementHelper.FindQuestButtonElement(document);
+            if (gorevButton != null)
+            {
+                gorevButton.InvokeMember("click");return;
+            }
+            var gorevAra = ElementHelper.FindQuestElement(document);
+            if (gorevAra != null)
+            {
+                //Kullanılmıyor
+            }
+            var sagMenu = MenuElement.RightMenuElement(document);
+            if (sagMenu != null)
+            {
+                sagMenu.Children[6].InvokeMember("click");return;
             }
         }
     }

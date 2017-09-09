@@ -29,12 +29,14 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnHaracTopla = new System.Windows.Forms.Button();
+            this.cbPolisNoPara = new System.Windows.Forms.CheckBox();
             this.cbHapisBaglanti = new System.Windows.Forms.CheckBox();
             this.lbdovulen = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.lbMinSeviye = new System.Windows.Forms.Label();
             this.tbMinSeviye = new System.Windows.Forms.TextBox();
-            this.btnSavas = new System.Windows.Forms.Button();
+            this.btnGorev = new System.Windows.Forms.Button();
             this.btnAntreman = new System.Windows.Forms.Button();
             this.lbBaglanti = new System.Windows.Forms.Label();
             this.lbCazibePuan = new System.Windows.Forms.Label();
@@ -61,22 +63,20 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.startPanel = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.cbPolisNoPara = new System.Windows.Forms.CheckBox();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.startPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.btnHaracTopla);
             this.panel1.Controls.Add(this.cbPolisNoPara);
             this.panel1.Controls.Add(this.cbHapisBaglanti);
             this.panel1.Controls.Add(this.lbdovulen);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.lbMinSeviye);
             this.panel1.Controls.Add(this.tbMinSeviye);
-            this.panel1.Controls.Add(this.btnSavas);
+            this.panel1.Controls.Add(this.btnGorev);
             this.panel1.Controls.Add(this.btnAntreman);
             this.panel1.Controls.Add(this.lbBaglanti);
             this.panel1.Controls.Add(this.lbCazibePuan);
@@ -103,9 +103,35 @@
             this.panel1.Size = new System.Drawing.Size(1405, 122);
             this.panel1.TabIndex = 0;
             // 
+            // btnHaracTopla
+            // 
+            this.btnHaracTopla.Location = new System.Drawing.Point(508, 63);
+            this.btnHaracTopla.Margin = new System.Windows.Forms.Padding(2);
+            this.btnHaracTopla.Name = "btnHaracTopla";
+            this.btnHaracTopla.Size = new System.Drawing.Size(89, 27);
+            this.btnHaracTopla.TabIndex = 23;
+            this.btnHaracTopla.Text = "Haraç Topla";
+            this.btnHaracTopla.UseVisualStyleBackColor = true;
+            this.btnHaracTopla.Click += new System.EventHandler(this.btnHaracTopla_Click);
+            // 
+            // cbPolisNoPara
+            // 
+            this.cbPolisNoPara.AutoSize = true;
+            this.cbPolisNoPara.Checked = true;
+            this.cbPolisNoPara.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbPolisNoPara.Location = new System.Drawing.Point(371, 32);
+            this.cbPolisNoPara.Name = "cbPolisNoPara";
+            this.cbPolisNoPara.Size = new System.Drawing.Size(136, 17);
+            this.cbPolisNoPara.TabIndex = 22;
+            this.cbPolisNoPara.Text = "Rüşvette Para Teklif Et";
+            this.cbPolisNoPara.UseVisualStyleBackColor = true;
+            this.cbPolisNoPara.CheckedChanged += new System.EventHandler(this.cbPolisNoPara_CheckedChanged);
+            // 
             // cbHapisBaglanti
             // 
             this.cbHapisBaglanti.AutoSize = true;
+            this.cbHapisBaglanti.Checked = true;
+            this.cbHapisBaglanti.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbHapisBaglanti.Location = new System.Drawing.Point(371, 16);
             this.cbHapisBaglanti.Name = "cbHapisBaglanti";
             this.cbHapisBaglanti.Size = new System.Drawing.Size(135, 17);
@@ -151,16 +177,16 @@
             this.tbMinSeviye.Size = new System.Drawing.Size(69, 20);
             this.tbMinSeviye.TabIndex = 17;
             // 
-            // btnSavas
+            // btnGorev
             // 
-            this.btnSavas.Location = new System.Drawing.Point(508, 32);
-            this.btnSavas.Margin = new System.Windows.Forms.Padding(2);
-            this.btnSavas.Name = "btnSavas";
-            this.btnSavas.Size = new System.Drawing.Size(89, 27);
-            this.btnSavas.TabIndex = 16;
-            this.btnSavas.Text = "Bot Start";
-            this.btnSavas.UseVisualStyleBackColor = true;
-            this.btnSavas.Click += new System.EventHandler(this.btnSavas_Click);
+            this.btnGorev.Location = new System.Drawing.Point(508, 32);
+            this.btnGorev.Margin = new System.Windows.Forms.Padding(2);
+            this.btnGorev.Name = "btnGorev";
+            this.btnGorev.Size = new System.Drawing.Size(89, 27);
+            this.btnGorev.TabIndex = 16;
+            this.btnGorev.Text = "Görev Yap";
+            this.btnGorev.UseVisualStyleBackColor = true;
+            this.btnGorev.Click += new System.EventHandler(this.btnGorev_Click);
             // 
             // btnAntreman
             // 
@@ -296,6 +322,8 @@
             // cbHapisKart
             // 
             this.cbHapisKart.AutoSize = true;
+            this.cbHapisKart.Checked = true;
+            this.cbHapisKart.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbHapisKart.Location = new System.Drawing.Point(371, 0);
             this.cbHapisKart.Name = "cbHapisKart";
             this.cbHapisKart.Size = new System.Drawing.Size(116, 17);
@@ -423,31 +451,11 @@
             this.webBrowser1.Size = new System.Drawing.Size(1405, 630);
             this.webBrowser1.TabIndex = 5;
             // 
-            // cbPolisNoPara
-            // 
-            this.cbPolisNoPara.AutoSize = true;
-            this.cbPolisNoPara.Location = new System.Drawing.Point(371, 32);
-            this.cbPolisNoPara.Name = "cbPolisNoPara";
-            this.cbPolisNoPara.Size = new System.Drawing.Size(136, 17);
-            this.cbPolisNoPara.TabIndex = 22;
-            this.cbPolisNoPara.Text = "Rüşvette Para Teklif Et";
-            this.cbPolisNoPara.UseVisualStyleBackColor = true;
-            this.cbPolisNoPara.CheckedChanged += new System.EventHandler(this.cbPolisNoPara_CheckedChanged);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(508, 63);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(89, 27);
-            this.button2.TabIndex = 23;
-            this.button2.Text = "Haraç Topla";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1405, 752);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.startPanel);
@@ -492,7 +500,7 @@
         private System.Windows.Forms.CheckBox cbHapisKart;
         private System.Windows.Forms.CheckBox cbHastaneKart;
         private System.Windows.Forms.Label lbBaglanti;
-        private System.Windows.Forms.Button btnSavas;
+        private System.Windows.Forms.Button btnGorev;
         private System.Windows.Forms.Button btnAntreman;
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.Label lbMinSeviye;
@@ -501,7 +509,7 @@
         private System.Windows.Forms.Label lbdovulen;
         private System.Windows.Forms.CheckBox cbHapisBaglanti;
         private System.Windows.Forms.CheckBox cbPolisNoPara;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnHaracTopla;
     }
 }
 

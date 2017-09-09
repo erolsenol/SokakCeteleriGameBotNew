@@ -122,6 +122,67 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement FindQuestButtonElement(HtmlDocument document)
+        {
+            var elements = document.GetElementById("qu[submit]");
+                if (elements != null)
+                { return elements; }
+            return null;
+        }
+
+        public static HtmlElement FindQuestReadyElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("table");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("default default-headerless"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindQuestFightElement(HtmlDocument document)
+        {
+            var elements = document.GetElementById("map");
+
+            foreach (HtmlElement e in elements)
+            {
+                if (e.OuterHtml.Contains("spot arrested") ||
+                                e.OuterHtml.Contains("spot motorbike-race") ||
+                                e.OuterHtml.Contains("spot armoured-car") ||
+                                e.OuterHtml.Contains("spot errand-boy") ||
+                                e.OuterHtml.Contains("spot carnival") ||
+                                e.OuterHtml.Contains("spot swat") ||
+                                e.OuterHtml.Contains("spot dog-walk") ||
+                                e.OuterHtml.Contains("spot k9") ||
+                                e.OuterHtml.Contains("spot dealers") ||
+                                e.OuterHtml.Contains("spot kidnapper") ||
+                                e.OuterHtml.Contains("spot bargain") ||
+                                e.OuterHtml.Contains("spot bank-robbery") ||
+                                e.OuterHtml.Contains("spot boss-suv") ||
+                                e.OuterHtml.Contains("spot musicians") ||
+                                e.OuterHtml.Contains("spot limo") ||
+                                e.OuterHtml.Contains("spot car-race") ||
+                                e.OuterHtml.Contains("spot firefight") ||
+                                e.OuterHtml.Contains("spot motorbike-rider") ||
+                                e.OuterHtml.Contains("spot playboy") ||
+                                e.OuterHtml.Contains("spot interview") ||
+                                e.OuterHtml.Contains("spot dog-fight") ||
+                                e.OuterHtml.Contains("spot pimp") || 
+                                e.OuterHtml.Contains("blinker") ||
+                                e.OuterHtml.Contains("east smarttip east-go") ||
+                                e.OuterHtml.Contains("north-east smarttip north-east-go") ||
+                                e.OuterHtml.Contains("north smarttip north-go") ||
+                                e.OuterHtml.Contains("north-west smarttip north-west-go") ||
+                                e.OuterHtml.Contains("west smarttip west-go") ||
+                                e.OuterHtml.Contains("south-west smarttip south-west-go") ||
+                                e.OuterHtml.Contains("south smarttip south-go") ||
+                                e.OuterHtml.Contains("south-east smarttip south-east-go"))
+                { return e; }
+            }
+            return null;
+        }
+
         public static HtmlElement FindPoliceElement(HtmlDocument document)
         {
             var elements = document.GetElementById("arrested");
