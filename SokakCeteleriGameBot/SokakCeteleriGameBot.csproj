@@ -53,6 +53,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Game.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="MenuElement.cs" />
     <Compile Include="EnerjiElement.cs" />
     <Compile Include="Program.cs" />

@@ -16,6 +16,52 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement FindRightInventoryElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("td");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("inventory_right"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindSatinAlElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("input");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("value").Contains("Satın al"))
+                {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindSatinAlindiElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("input");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("btn ok"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindLeftInventoryElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("td");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("inventory_left"))
+                { return e; }
+            }
+            return null;
+        }
+
         public static HtmlElement FindTrainingElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
@@ -110,14 +156,42 @@ namespace SokakCeteleriGameBot
             }
             return null;
         }
-        //Çalışmnaya bilir 
+        
         public static HtmlElement FindQuestElement(HtmlDocument document)
         {
-            var elements = document.GetElementsByTagName("table").GetElementsByName("qListContainer");
+            var elements = document.GetElementsByTagName("form");
             foreach (HtmlElement e in elements)
             {
-                if (e != null)
-                {return e.Children[0];}
+                if (e.GetAttribute("action").Contains("/quest/accept"))
+                {
+                    return e.Children[2];
+                }
+            }
+            //var elements = document.GetElementsByTagName("table");
+            //foreach (HtmlElement e in elements)
+            //{
+            //    if (e.GetAttribute("if").Contains("qListContainer"))
+            //    {
+            //        var abc = e.GetElementsByTagName("input");
+            //        foreach (HtmlElement a in abc)
+            //        {
+            //            if (a.GetAttribute("className").Contains("btn go"))
+            //            {
+            //                return a;
+            //            }
+            //        }
+            //    }
+            //}
+            return null;
+        }
+
+        public static HtmlElement Dov(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("table");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("cmenu"))
+                { return e; }
             }
             return null;
         }
@@ -143,42 +217,85 @@ namespace SokakCeteleriGameBot
 
         public static HtmlElement FindQuestFightElement(HtmlDocument document)
         {
-            var elements = document.GetElementById("map");
-
-            foreach (HtmlElement e in elements)
+            var elements = document.GetElementsByTagName("div");
+            if (elements != null)
             {
-                if (e.OuterHtml.Contains("spot arrested") ||
-                                e.OuterHtml.Contains("spot motorbike-race") ||
-                                e.OuterHtml.Contains("spot armoured-car") ||
-                                e.OuterHtml.Contains("spot errand-boy") ||
-                                e.OuterHtml.Contains("spot carnival") ||
-                                e.OuterHtml.Contains("spot swat") ||
-                                e.OuterHtml.Contains("spot dog-walk") ||
-                                e.OuterHtml.Contains("spot k9") ||
-                                e.OuterHtml.Contains("spot dealers") ||
-                                e.OuterHtml.Contains("spot kidnapper") ||
-                                e.OuterHtml.Contains("spot bargain") ||
-                                e.OuterHtml.Contains("spot bank-robbery") ||
-                                e.OuterHtml.Contains("spot boss-suv") ||
-                                e.OuterHtml.Contains("spot musicians") ||
-                                e.OuterHtml.Contains("spot limo") ||
-                                e.OuterHtml.Contains("spot car-race") ||
-                                e.OuterHtml.Contains("spot firefight") ||
-                                e.OuterHtml.Contains("spot motorbike-rider") ||
-                                e.OuterHtml.Contains("spot playboy") ||
-                                e.OuterHtml.Contains("spot interview") ||
-                                e.OuterHtml.Contains("spot dog-fight") ||
-                                e.OuterHtml.Contains("spot pimp") || 
-                                e.OuterHtml.Contains("blinker") ||
-                                e.OuterHtml.Contains("east smarttip east-go") ||
-                                e.OuterHtml.Contains("north-east smarttip north-east-go") ||
-                                e.OuterHtml.Contains("north smarttip north-go") ||
-                                e.OuterHtml.Contains("north-west smarttip north-west-go") ||
-                                e.OuterHtml.Contains("west smarttip west-go") ||
-                                e.OuterHtml.Contains("south-west smarttip south-west-go") ||
-                                e.OuterHtml.Contains("south smarttip south-go") ||
-                                e.OuterHtml.Contains("south-east smarttip south-east-go"))
-                { return e; }
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("className").Contains("content-wrap"))
+                    {
+                        var abc = e.GetElementsByTagName("a");
+                        if (abc != null)
+                        {
+                            foreach (HtmlElement a in abc)
+                            {
+                                if (a.GetAttribute("className").Contains("spot arrested") ||
+                                    a.GetAttribute("className").Contains("spot motorbike-race") ||
+                                    a.GetAttribute("className").Contains("spot armoured-car") ||
+                                    a.GetAttribute("className").Contains("spot errand-boy") ||
+                                    a.GetAttribute("className").Contains("spot carnival") ||
+                                    a.GetAttribute("className").Contains("spot swat") ||
+                                    a.GetAttribute("className").Contains("spot dog-walk") ||
+                                    a.GetAttribute("className").Contains("spot k9") ||
+                                    a.GetAttribute("className").Contains("spot dealers") ||
+                                    a.GetAttribute("className").Contains("spot kidnapper") ||
+                                    a.GetAttribute("className").Contains("spot bargain") ||
+                                    a.GetAttribute("className").Contains("spot bank-robbery") ||
+                                    a.GetAttribute("className").Contains("spot boss-suv") ||
+                                    a.GetAttribute("className").Contains("spot musicians") ||
+                                    a.GetAttribute("className").Contains("spot limo") ||
+                                    a.GetAttribute("className").Contains("spot car-race") ||
+                                    a.GetAttribute("className").Contains("spot firefight") ||
+                                    a.GetAttribute("className").Contains("spot motorbike-rider") ||
+                                    a.GetAttribute("className").Contains("spot playboy") ||
+                                    a.GetAttribute("className").Contains("spot interview") ||
+                                    a.GetAttribute("className").Contains("spot dog-fight") ||
+                                    a.GetAttribute("className").Contains("spot pimp") ||
+                                    a.GetAttribute("className").Contains("blinker") ||
+                                    a.GetAttribute("className").Contains("east smarttip east-go") ||
+                                    a.GetAttribute("className").Contains("north-east smarttip north-east-go") ||
+                                    a.GetAttribute("className").Contains("north smarttip north-go") ||
+                                    a.GetAttribute("className").Contains("north-west smarttip north-west-go") ||
+                                    a.GetAttribute("className").Contains("west smarttip west-go") ||
+                                    a.GetAttribute("className").Contains("south-west smarttip south-west-go") ||
+                                    a.GetAttribute("className").Contains("south smarttip south-go") ||
+                                    a.GetAttribute("className").Contains("south-east smarttip south-east-go"))
+                                { return a; }
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindQuestSearchElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            if (elements != null)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("className").Contains("content-wrap"))
+                    {
+                        var abc = e.GetElementsByTagName("a");
+                        if (abc != null)
+                        {
+                            foreach (HtmlElement a in abc)
+                            {
+                                if (a.GetAttribute("className").Contains("east smarttip east-go") ||
+                                    a.GetAttribute("className").Contains("north-east smarttip north-east-go") ||
+                                    a.GetAttribute("className").Contains("north smarttip north-go") ||
+                                    a.GetAttribute("className").Contains("north-west smarttip north-west-go") ||
+                                    a.GetAttribute("className").Contains("west smarttip west-go") ||
+                                    a.GetAttribute("className").Contains("south-west smarttip south-west-go") ||
+                                    a.GetAttribute("className").Contains("south smarttip south-go") ||
+                                    a.GetAttribute("className").Contains("south-east smarttip south-east-go"))
+                                { return a; }
+                            }
+                        }
+                    }
+                }
             }
             return null;
         }
@@ -199,6 +316,14 @@ namespace SokakCeteleriGameBot
                 if (e.GetAttribute("cellpadding").Contains("4")&& e.GetAttribute("cellspacing").Contains("0"))
                 { return e; }
             }
+            return null;
+        }
+
+        public static HtmlElement FindPrisonWhoElement(HtmlDocument document)
+        {
+            var elements = document.GetElementById("msgbox");
+            if (elements != null)
+                { return elements; }
             return null;
         }
 

@@ -1,22 +1,110 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Threading;
 // ReSharper disable PossibleNullReferenceException
 
 namespace SokakCeteleriGameBot
 {
     public partial class MainForm : Form
     {
-        readonly WebBrowser _webBrowser;
-        bool _isPageLoaded, _enerjiDurum, _hapisKacKart = true, _hapisKacBaglanti = true, _rusvetNoPara = true;
-        bool _isLoggedIn;
+        //  readonly WebBrowser _webBrowser;
+        bool _isPageLoaded, _isLoggedIn, _enerjiDurum, _hapisKacKart = true, _hapisKacBaglanti = true, _rusvetNoPara = true,
+            _gucKartKullan, _zekaKartKullan, _hastaneKartKullan = true, _hastaneParaKullan = true, _zehirKartKullan = true,
+            _canKartKullan = true, _aldindi;
 
         private GameOps _game = GameOps.Non;
         private Int64 _atak, _baglanti, _respectPoints;
-        private int _can, _enerji, _enerjiToplam, _risk, _zehir, _seviye, _para, _minSeviye, _dovulen = 0;
+        private int _can, _enerji, _enerjiToplam, _zehirToplam, _cantoplam, _risk, _zehir, _seviye, _para, _minSeviye, _taneZekaAl,
+            _taneGucAl;
         private int _zeka, _guc, _cazibe;
         private int _battlePoints;
-
+        
         private HtmlElement elEnerji, elGuc, elZeka;
+
+        private void cbZekaAl_TextChanged(object sender, EventArgs e)
+        {
+            double odondur = 0;
+            if (double.TryParse(cbZekaAl.Text, out odondur))
+            {
+                _taneZekaAl = int.Parse(cbZekaAl.Text);
+                if (_taneZekaAl > (_baglanti / 100))
+                {
+                    cbZekaAl.Text = (_baglanti / 100).ToString();
+                }
+            }
+            else
+            { cbZekaAl.Text = ""; }
+        }
+
+        private void cbGucAl_TextChanged(object sender, EventArgs e)
+        {
+            double odondur = 0;
+            if (double.TryParse(cbGucAl.Text, out odondur))
+            { _taneGucAl = int.Parse(cbGucAl.Text);
+                if (_taneGucAl > (_baglanti / 100))
+                {
+                    cbGucAl.Text = (_baglanti / 100).ToString();
+                }
+            }
+            else
+            { cbGucAl.Text = ""; }
+        }
+
+        private void cbZehirKart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbZehirKart.Checked)
+            { _zehirKartKullan = true; }
+            else
+            { _zehirKartKullan = false; }
+        }
+
+        private void cbCanKart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbCanKart.Checked)
+            { _canKartKullan = true; }
+            else
+            { _canKartKullan = false; }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            _game = GameOps.Non;
+            cbGucAl.Enabled = false;
+            cbZekaAl.Enabled = false;
+        }
+
+        private void cbZekaKart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbZekaKart.Checked)
+            { _zekaKartKullan = true; }
+            else
+            { _zekaKartKullan = false; }
+        }
+
+        private void tbMinSeviye_TextChanged(object sender, EventArgs e)
+        {
+            double odondur = 0;
+            if (double.TryParse(tbMinSeviye.Text, out odondur))
+            { _minSeviye = int.Parse(tbMinSeviye.Text); }
+            else
+            { _minSeviye = 5; }
+        }
+
+        private void cbHastanePara_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbHastanePara.Checked)
+            { _hastaneParaKullan = true; }
+            else
+            { _hastaneParaKullan = false; }
+        }
+
+        private void cbHastaneKart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbHastaneKart.Checked)
+            { _hastaneKartKullan = true; }
+            else
+            { _hastaneKartKullan = false; }
+        }
 
         private void cbHapisKart_CheckedChanged(object sender, EventArgs e)
         {
@@ -32,6 +120,14 @@ namespace SokakCeteleriGameBot
             { _hapisKacBaglanti = true; }
             else
             { _hapisKacBaglanti = false; }
+        }
+
+        private void cbGuckart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbGuckart.Checked)
+            { _gucKartKullan = true; }
+            else
+            { _gucKartKullan = false; }
         }
 
         private void cbPolisNoPara_CheckedChanged(object sender, EventArgs e)
@@ -63,36 +159,35 @@ namespace SokakCeteleriGameBot
             _game = GameOps.Savas;
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
-            double odondur = 0;
-            if (double.TryParse(tbMinSeviye.Text, out odondur))
-            { _minSeviye = int.Parse(tbMinSeviye.Text); }
-            else
-            { _minSeviye = 5; }
             var solMenu = MenuElement.LeftMenuElement(webBrowser1.Document);
             solMenu.Children[1].Children[0].InvokeMember("click");
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-           
-        }
-
         private void btnAntreman_Click(object sender, EventArgs e)
         {
-            _webBrowser.Navigate("http://sokakceteleri.com/");
-            _webBrowser.DocumentCompleted += _webBrowser_DocumentCompleted;
-            _game = GameOps.Antrenman;
-            if (_enerji == _enerjiToplam)
-            { _enerjiDurum = true; }
-            Antrenman(_webBrowser.Document);
+            if ((_baglanti / 100) >= (_taneZekaAl + _taneGucAl))
+            {
+                _game = GameOps.Antrenman;
+                if (_enerji == _enerjiToplam)
+                { _enerjiDurum = true; }
+                Antrenman(webBrowser1.Document);
+                cbGucAl.Enabled = false;
+                cbZekaAl.Enabled = false;
+            }
+            else
+            {
+                cbZekaAl.Clear();
+                cbGucAl.Clear();
+                MessageBox.Show("Lütfen Satın Alınacak Kart Sayılarını Yanlış Yazmayınız");}
         }
 
         public MainForm()
         {
             InitializeComponent();
-
-            _webBrowser = new WebBrowser();
-            _webBrowser.ScriptErrorsSuppressed = true;
+            //_webBrowser = new WebBrowser();
+            //_webBrowser.ScriptErrorsSuppressed = true;
+            //_webBrowser.Navigate("http://sokakceteleri.com/");
+            //_webBrowser.DocumentCompleted += _webBrowser_DocumentCompleted;
             webBrowser1.ScriptErrorsSuppressed = true;
 
             //_webBrowser.Dock = DockStyle.Fill;
@@ -110,7 +205,7 @@ namespace SokakCeteleriGameBot
             webBrowser1.DocumentCompleted += WebBrowser1_DocumentCompleted;
         }
 
-        private void _webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+    /*    private void _webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var document = _webBrowser.Document;
             if (document == null) return;
@@ -140,14 +235,14 @@ namespace SokakCeteleriGameBot
                     break;
             }
         }
-
+        */
         private void WebBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var document = webBrowser1.Document;
             if (document == null) return;
 
             LoginToGame(document);
-            //  if (_isPageLoaded) { return; } 
+          //if (_isPageLoaded) { return; } 
 
             BilgileriGetir(document);
             GetTraniningPoints(document);
@@ -162,7 +257,7 @@ namespace SokakCeteleriGameBot
                     Savas(document);
                     break;
                 case GameOps.Gorev:
-                    //Gorev
+                     GorevYap(webBrowser1.Document);
                     break;
                 case GameOps.Harac:
                     HaracTopla(webBrowser1.Document);
@@ -209,14 +304,20 @@ namespace SokakCeteleriGameBot
                     lbRisk.Text = @"Risk : " + _risk;
                     lbZehir.Text = @"Zehir : " + _zehir;
 
+                    _cantoplam = Convert.ToInt16(userPropertiesElement.FirstChild.FirstChild.Children[1].FirstChild.GetAttribute("title")
+                          .Trim().Replace(" ", string.Empty).Substring(userPropertiesElement.FirstChild.FirstChild.Children[1].FirstChild.GetAttribute("title")
+                          .Trim().Replace(" ", string.Empty).Length - 3, 3));
+
                      _enerjiToplam =Convert.ToInt16(userPropertiesElement.Children[0].Children[0].Children[2].Children[0].GetAttribute("title")
                         .Trim().Replace(" ", string.Empty).Substring(userPropertiesElement.Children[0].Children[0].Children[2]
                         .Children[0].GetAttribute("title").Trim().Replace(" ", string.Empty).Length - 3, 3));
-                  
-                    
+
+                    _zehirToplam = Convert.ToInt16(userPropertiesElement.FirstChild.FirstChild.Children[4].FirstChild.GetAttribute("title")
+                          .Trim().Replace(" ", string.Empty).Substring(userPropertiesElement.FirstChild.FirstChild.Children[4].FirstChild.GetAttribute("title")
+                          .Trim().Replace(" ", string.Empty).Length - 3, 3));
+
                     _isPageLoaded = true;
                 }
-
                 var lwl = userPropertiesElement.Children[0].Children[0].Children[0].Children[1].Children[0];
                 if (lwl != null)
                 {
@@ -225,7 +326,7 @@ namespace SokakCeteleriGameBot
                 }
             }
         }
-
+       
         private void GetTraniningPoints(HtmlDocument document)
         {
             var trainingInfosElement = ElementHelper.FindTrainingElement(document);
@@ -264,11 +365,13 @@ namespace SokakCeteleriGameBot
                     {
                         _baglanti = Convert.ToInt64(baglantii.Substring(0, baglantii.Length - 1) + "000");
                         lbBaglanti.Text = @"Bağlantı : " + _baglanti.ToString();
+                        lbSatınKart.Text = @"Satın Alabileceğiniz Kart Sayısı : " + (_baglanti / 100).ToString();
                     }
                     else
                     {
                         _baglanti = Convert.ToInt16(baglantii);
                         lbBaglanti.Text = @"Bağlantı : " + _baglanti.ToString();
+                        lbSatınKart.Text = @"Satın Alabileceğiniz Kart Sayısı : " + (_baglanti / 100).ToString();
                     }
                 }
                 //Atak
@@ -324,7 +427,7 @@ namespace SokakCeteleriGameBot
 
                 if (_enerji==_enerjiToplam)
                 {
-                    _enerjiDurum = true;_webBrowser.Refresh(); return;
+                    _enerjiDurum = true;webBrowser1.Refresh(); return;
                 }
                 else if (findDrink != null)
                 {
@@ -386,7 +489,72 @@ namespace SokakCeteleriGameBot
                     elGuc.InvokeMember("click"); return;
                 }
             }
-            else
+            else if (_zekaKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+                    var zeka1 = Material.FindZeka1Element(sagEnvanter);
+                    if (zeka1 != null)
+                    {
+                        zeka1.InvokeMember("click");
+                        var solEnvanter = ElementHelper.FindLeftInventoryElement(document);
+                        solEnvanter.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var esyaKullan = Material.FindUseMaterialElement(document);
+                        //  esyaKullan.FirstChild.Children[4].Children[3].SetAttribute("value", "5");
+                        esyaKullan.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    var zeka10 = Material.FindZeka10Element(sagEnvanter);
+                    if (zeka10 != null)
+                    {
+                        zeka10.InvokeMember("click");
+                        var solEnvanter = ElementHelper.FindLeftInventoryElement(document);
+                        solEnvanter.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var esyaKullan = Material.FindUseMaterialElement(document);
+                        esyaKullan.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        _zekaKartKullan = false; webBrowser1.Refresh(); cbZekaKart.Visible = false; return;
+                    }
+                }
+               
+                var sagMenu = MenuElement.RightMenuElement(document);
+                sagMenu.FirstChild.InvokeMember("click"); return;
+            }
+            else if (_gucKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+                    var guc1 = Material.FindGuc1Element(sagEnvanter);
+                    if (guc1 != null)
+                    {
+                        guc1.InvokeMember("click");
+                        var solEnvanter = ElementHelper.FindLeftInventoryElement(document);
+                        solEnvanter.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var esyaKullan = Material.FindUseMaterialElement(document);
+                        //  esyaKullan.FirstChild.Children[4].Children[3].SetAttribute("value", "5");
+                        esyaKullan.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    var guc10 = Material.FindGuc10Element(sagEnvanter);
+                    if (guc10 != null)
+                    {
+                        guc10.InvokeMember("click");
+                        var solEnvanter = ElementHelper.FindLeftInventoryElement(document);
+                        solEnvanter.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var esyaKullan = Material.FindUseMaterialElement(document);
+                        esyaKullan.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        _gucKartKullan = false; webBrowser1.Refresh(); cbGuckart.Visible = false; return;
+                    }
+                }
+               
+                var sagMenu = MenuElement.RightMenuElement(document);
+                sagMenu.FirstChild.InvokeMember("click"); return;
+            }
             {_game = GameOps.Non; return; }
         }
 
@@ -407,7 +575,16 @@ namespace SokakCeteleriGameBot
                 }
                 else
                 {
-                    prison.Children[0].Children[3].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                    var hapistemiyim = ElementHelper.FindPrisonWhoElement(document);
+                    if (hapistemiyim.FirstChild.Children[1].Children[1].CanHaveChildren)
+                    {
+                        prison.Children[0].Children[3].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        var sokak = MenuElement.LeftMenuElement(document);
+                        sokak.Children[1].FirstChild.InvokeMember("click");return;
+                    }
                 }
                 var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
                 if (escapeConnect != null)
@@ -436,8 +613,79 @@ namespace SokakCeteleriGameBot
                         GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
                     if ((_para / 1000) >= rusvet3)
                     { police.Children[3].Children[0].InvokeMember("click"); return; }
+                    else
+                    { cbPolisNoPara.Checked = false; }
                 }
                   police.Children[4].Children[0].InvokeMember("click"); return;
+            }
+            var hospital = ElementHelper.FindHospitalElement(document);
+            if (hospital != null)
+            {
+                if (hospital.FirstChild.Children[2].CanHaveChildren)
+                {
+                    if (0 < Convert.ToInt16(hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.
+                                        FirstChild.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
+                    {
+                        hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                    }
+                    var paraYok = EnerjiElement.LowEnerjiTrainingElement(document);
+                    if (paraYok != null && paraYok.Children[2].GetAttribute("className").Contains("getin b"))
+                    {
+                        _hastaneKartKullan = false; cbHastanePara.Checked = false;
+                    }
+                    if (_hastaneParaKullan)
+                    {
+                        hospital.FirstChild.Children[2].FirstChild.Children[1].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                    }
+                }
+                var sokak = MenuElement.LeftMenuElement(document);
+                sokak.Children[1].FirstChild.InvokeMember("click");return;
+            }
+            if (_zehir + 20 >= _zehirToplam && _zehirKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+                    
+                    var zehir = Material.FindZehirElement(sagEnvanter);
+                    if (zehir != null)
+                    {
+                        zehir.InvokeMember("click");
+                        var kullan = ElementHelper.FindLeftInventoryElement(document);
+                        kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var ic = Material.FindUseMaterialElement(document);
+                        ic.FirstChild.Children[5].FirstChild.InvokeMember("click");return;
+                    }
+                    else
+                    {
+                        cbZehirKart.Checked = false;
+                    }
+                }
+                var envanter = MenuElement.RightMenuElement(document);
+                envanter.FirstChild.InvokeMember("click"); return;
+            }
+            if (_can < 6 && _canKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+                    var can = Material.FindCanElement(sagEnvanter);
+                    if (can != null)
+                    {
+                        can.InvokeMember("click");
+                        var kullan = ElementHelper.FindLeftInventoryElement(document);
+                        kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var ic = Material.FindUseMaterialElement(document);
+                        ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        cbCanKart.Checked = false;
+                    }
+
+                }
+                var envanter = MenuElement.RightMenuElement(document);
+                envanter.FirstChild.InvokeMember("click");return;
             }
             if (_enerji < 60) { _enerjiDurum = false; }
             if (!_enerjiDurum)
@@ -480,8 +728,7 @@ namespace SokakCeteleriGameBot
                 //}
                 if (dovusYap != null)
                 {
-                    _dovulen++;
-                    dovusYap.InvokeMember("click");lbdovulen.Text = "Dövülen : " + _dovulen.ToString(); return;
+                    dovusYap.InvokeMember("click");return;
                 }
                 else if (dovusAra != null)
                 {
@@ -500,6 +747,8 @@ namespace SokakCeteleriGameBot
                     sokak.Children[1].Children[0].InvokeMember("click"); return;
                 }
             }
+            var sokak1 = MenuElement.LeftMenuElement(document);
+            sokak1.Children[1].FirstChild.InvokeMember("click");return;
         }
 
         private void HaracTopla(HtmlDocument document)
@@ -547,7 +796,133 @@ namespace SokakCeteleriGameBot
         private void GorevYap(HtmlDocument document)
         {
             if (document == null) return;
-            if (_enerji < 10) { _enerjiDurum = false; }
+            var prison = ElementHelper.FindPrisonElement(document);
+            if (prison != null)
+            {
+                if (_hapisKacKart && Convert.ToInt16(prison.Children[0].Children[2].Children[0].Children[0].
+                    Children[0].Children[0].Children[1].InnerText) > 0)
+                {
+                    prison.Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                }
+                else if (_hapisKacBaglanti && _baglanti >= 78)
+                {
+                    prison.Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                }
+                else
+                {
+                    var hapistemiyim = ElementHelper.FindPrisonWhoElement(document);
+                    if (hapistemiyim.FirstChild.Children[1].Children[1].CanHaveChildren)
+                    {
+                        prison.Children[0].Children[3].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        var sokak = MenuElement.LeftMenuElement(document);
+                        sokak.Children[1].FirstChild.InvokeMember("click"); return;
+                    }
+                }
+                var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
+                if (escapeConnect != null)
+                {
+                    escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
+                        Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                }
+            }
+            var police = ElementHelper.FindPoliceElement(document);
+            if (police != null)
+            {
+                if (_rusvetNoPara)
+                {
+                    int rusvet1 = Convert.ToInt16(police.Children[1].Children[0].GetAttribute("value").
+                                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[1].Children[0].
+                                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet1)
+                    { police.Children[1].Children[0].InvokeMember("click"); return; }
+                    int rusvet2 = Convert.ToInt16(police.Children[2].Children[0].GetAttribute("value").
+                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[2].Children[0].
+                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet2)
+                    { police.Children[2].Children[0].InvokeMember("click"); return; }
+                    int rusvet3 = Convert.ToInt16(police.Children[3].Children[0].GetAttribute("value").
+                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[3].Children[0].
+                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet3)
+                    { police.Children[3].Children[0].InvokeMember("click"); return; }
+                    else
+                    { cbPolisNoPara.Checked = false; }
+                }
+                police.Children[4].Children[0].InvokeMember("click"); return;
+            }
+            var hospital = ElementHelper.FindHospitalElement(document);
+            if (hospital != null)
+            {
+                if (hospital.FirstChild.Children[2].CanHaveChildren)
+                {
+                    if (0 < Convert.ToInt16(hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.
+                                        FirstChild.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
+                    {
+                        hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                    }
+                    var paraYok = EnerjiElement.LowEnerjiTrainingElement(document);
+                    if (paraYok != null && paraYok.Children[2].GetAttribute("className").Contains("getin b"))
+                    {
+                        _hastaneKartKullan = false; cbHastanePara.Checked = false;
+                    }
+                    if (_hastaneParaKullan)
+                    {
+                        hospital.FirstChild.Children[2].FirstChild.Children[1].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                    }
+                }
+                var sokak = MenuElement.LeftMenuElement(document);
+                sokak.Children[1].FirstChild.InvokeMember("click"); return;
+            }
+            if (_zehir + 20 >= _zehirToplam && _zehirKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+
+                    var zehir = Material.FindZehirElement(sagEnvanter);
+                    if (zehir != null)
+                    {
+                        zehir.InvokeMember("click");
+                        var kullan = ElementHelper.FindLeftInventoryElement(document);
+                        kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var ic = Material.FindUseMaterialElement(document);
+                        ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        cbZehirKart.Checked = false;
+                    }
+                }
+                var envanter = MenuElement.RightMenuElement(document);
+                envanter.FirstChild.InvokeMember("click"); return;
+            }
+            if (_can < 6 && _canKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+                    var can = Material.FindCanElement(sagEnvanter);
+                    if (can != null)
+                    {
+                        can.InvokeMember("click");
+                        var kullan = ElementHelper.FindLeftInventoryElement(document);
+                        kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var ic = Material.FindUseMaterialElement(document);
+                        ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        cbCanKart.Checked = false;
+                    }
+
+                }
+                var envanter = MenuElement.RightMenuElement(document);
+                envanter.FirstChild.InvokeMember("click"); return;
+            }
+            if (_enerji < 60) { _enerjiDurum = false; }
             if (!_enerjiDurum)
             {
                 var findDrink = EnerjiElement.FindDrinkElement(document);
@@ -574,28 +949,38 @@ namespace SokakCeteleriGameBot
                     elEnerji.InvokeMember("click"); ; return;
                 }
             }
-
+            ///////////////////////////////////////////////////////////////////////////
             var gorevSaldir = ElementHelper.FindQuestFightElement(document);
             if (gorevSaldir != null)
             {
-                elEnerji.InvokeMember("click");
+                gorevSaldir.InvokeMember("click");
+                var dov = ElementHelper.Dov(document);
+                if (dov != null)
+                {
+                    dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click");
+                }
                 return;
+            }
+            var gorevAra = ElementHelper.FindQuestSearchElement(document);
+            if (gorevAra != null)
+            {
+                gorevAra.InvokeMember("click");return;
             }
             var gorevHazir = ElementHelper.FindQuestReadyElement(document);
             if (gorevHazir != null)
             {
                 var sokak = MenuElement.LeftMenuElement(document);
-                sokak.Children[1].Children[0].InvokeMember("click");return;
+                sokak.Children[1].FirstChild.InvokeMember("click");return;
             }
-            var gorevButton = ElementHelper.FindQuestButtonElement(document);
-            if (gorevButton != null)
+            //var gorevButton = ElementHelper.FindQuestButtonElement(document);
+            //if (gorevButton != null)
+            //{
+            //    gorevButton.InvokeMember("click");return;
+            //}
+            var gorevAl = ElementHelper.FindQuestElement(document);
+            if (gorevAl != null)
             {
-                gorevButton.InvokeMember("click");return;
-            }
-            var gorevAra = ElementHelper.FindQuestElement(document);
-            if (gorevAra != null)
-            {
-                //Kullanılmıyor
+                gorevAl.InvokeMember("click");return;
             }
             var sagMenu = MenuElement.RightMenuElement(document);
             if (sagMenu != null)
@@ -603,5 +988,6 @@ namespace SokakCeteleriGameBot
                 sagMenu.Children[6].InvokeMember("click");return;
             }
         }
+
     }
 }
