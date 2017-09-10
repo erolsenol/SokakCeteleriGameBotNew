@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.btnNewIp = new System.Windows.Forms.Button();
+            this.btnGo = new System.Windows.Forms.Button();
+            this.cbRiskKart = new System.Windows.Forms.CheckBox();
+            this.cbEnerjiKart = new System.Windows.Forms.CheckBox();
             this.cbCanKart = new System.Windows.Forms.CheckBox();
             this.cbZehirKart = new System.Windows.Forms.CheckBox();
             this.cbHastanePara = new System.Windows.Forms.CheckBox();
@@ -74,6 +82,7 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.startPanel = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.cbKrediKas = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.startPanel.SuspendLayout();
@@ -81,6 +90,15 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.cbKrediKas);
+            this.panel1.Controls.Add(this.button5);
+            this.panel1.Controls.Add(this.button4);
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.btnNewIp);
+            this.panel1.Controls.Add(this.btnGo);
+            this.panel1.Controls.Add(this.cbRiskKart);
+            this.panel1.Controls.Add(this.cbEnerjiKart);
             this.panel1.Controls.Add(this.cbCanKart);
             this.panel1.Controls.Add(this.cbZehirKart);
             this.panel1.Controls.Add(this.cbHastanePara);
@@ -118,6 +136,93 @@
             this.panel1.Size = new System.Drawing.Size(1405, 122);
             this.panel1.TabIndex = 0;
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(1004, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(85, 23);
+            this.button5.TabIndex = 38;
+            this.button5.Text = "ip 0 la";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(1115, 99);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(85, 23);
+            this.button4.TabIndex = 37;
+            this.button4.Text = "Kredi Kas";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(711, 96);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(85, 23);
+            this.button3.TabIndex = 36;
+            this.button3.Text = "Oyuna Dön";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(913, 28);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(85, 23);
+            this.button2.TabIndex = 35;
+            this.button2.Text = "İp Adrese Bak";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // btnNewIp
+            // 
+            this.btnNewIp.Location = new System.Drawing.Point(913, 3);
+            this.btnNewIp.Name = "btnNewIp";
+            this.btnNewIp.Size = new System.Drawing.Size(85, 23);
+            this.btnNewIp.TabIndex = 34;
+            this.btnNewIp.Text = "New İp Adresi";
+            this.btnNewIp.UseVisualStyleBackColor = true;
+            this.btnNewIp.Click += new System.EventHandler(this.btnNewIp_Click);
+            // 
+            // btnGo
+            // 
+            this.btnGo.Location = new System.Drawing.Point(601, 52);
+            this.btnGo.Margin = new System.Windows.Forms.Padding(2);
+            this.btnGo.Name = "btnGo";
+            this.btnGo.Size = new System.Drawing.Size(105, 70);
+            this.btnGo.TabIndex = 33;
+            this.btnGo.Text = "Go";
+            this.btnGo.UseVisualStyleBackColor = true;
+            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
+            // 
+            // cbRiskKart
+            // 
+            this.cbRiskKart.AutoSize = true;
+            this.cbRiskKart.Checked = true;
+            this.cbRiskKart.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbRiskKart.Location = new System.Drawing.Point(711, 52);
+            this.cbRiskKart.Name = "cbRiskKart";
+            this.cbRiskKart.Size = new System.Drawing.Size(103, 17);
+            this.cbRiskKart.TabIndex = 32;
+            this.cbRiskKart.Text = "Risk Kartı Kullan";
+            this.cbRiskKart.UseVisualStyleBackColor = true;
+            this.cbRiskKart.CheckedChanged += new System.EventHandler(this.cbRiskKart_CheckedChanged);
+            // 
+            // cbEnerjiKart
+            // 
+            this.cbEnerjiKart.AutoSize = true;
+            this.cbEnerjiKart.Checked = true;
+            this.cbEnerjiKart.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnerjiKart.Location = new System.Drawing.Point(711, 19);
+            this.cbEnerjiKart.Name = "cbEnerjiKart";
+            this.cbEnerjiKart.Size = new System.Drawing.Size(108, 17);
+            this.cbEnerjiKart.TabIndex = 31;
+            this.cbEnerjiKart.Text = "Enerji Kartı Kullan";
+            this.cbEnerjiKart.UseVisualStyleBackColor = true;
+            this.cbEnerjiKart.CheckedChanged += new System.EventHandler(this.cbEnerjiKart_CheckedChanged);
+            // 
             // cbCanKart
             // 
             this.cbCanKart.AutoSize = true;
@@ -136,7 +241,7 @@
             this.cbZehirKart.AutoSize = true;
             this.cbZehirKart.Checked = true;
             this.cbZehirKart.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbZehirKart.Location = new System.Drawing.Point(368, 79);
+            this.cbZehirKart.Location = new System.Drawing.Point(711, 34);
             this.cbZehirKart.Name = "cbZehirKart";
             this.cbZehirKart.Size = new System.Drawing.Size(106, 17);
             this.cbZehirKart.TabIndex = 29;
@@ -147,8 +252,6 @@
             // cbHastanePara
             // 
             this.cbHastanePara.AutoSize = true;
-            this.cbHastanePara.Checked = true;
-            this.cbHastanePara.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbHastanePara.Location = new System.Drawing.Point(368, 62);
             this.cbHastanePara.Name = "cbHastanePara";
             this.cbHastanePara.Size = new System.Drawing.Size(135, 17);
@@ -162,7 +265,7 @@
             this.btnStop.Location = new System.Drawing.Point(601, 0);
             this.btnStop.Margin = new System.Windows.Forms.Padding(2);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(105, 122);
+            this.btnStop.Size = new System.Drawing.Size(105, 59);
             this.btnStop.TabIndex = 27;
             this.btnStop.Text = "Dur - Stop";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -595,6 +698,17 @@
             this.webBrowser1.Size = new System.Drawing.Size(1405, 630);
             this.webBrowser1.TabIndex = 5;
             // 
+            // cbKrediKas
+            // 
+            this.cbKrediKas.AutoSize = true;
+            this.cbKrediKas.Location = new System.Drawing.Point(711, 80);
+            this.cbKrediKas.Name = "cbKrediKas";
+            this.cbKrediKas.Size = new System.Drawing.Size(115, 17);
+            this.cbKrediKas.TabIndex = 39;
+            this.cbKrediKas.Text = "5. Seviyede Savaş";
+            this.cbKrediKas.UseVisualStyleBackColor = true;
+            this.cbKrediKas.CheckedChanged += new System.EventHandler(this.cbKrediKas_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -667,6 +781,15 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox cbZekaAl;
         private System.Windows.Forms.TextBox cbGucAl;
+        private System.Windows.Forms.CheckBox cbEnerjiKart;
+        private System.Windows.Forms.CheckBox cbRiskKart;
+        private System.Windows.Forms.Button btnGo;
+        private System.Windows.Forms.Button btnNewIp;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.CheckBox cbKrediKas;
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Threading;
+using Microsoft.Win32;
 // ReSharper disable PossibleNullReferenceException
 
 namespace SokakCeteleriGameBot
@@ -9,17 +9,73 @@ namespace SokakCeteleriGameBot
     {
         //  readonly WebBrowser _webBrowser;
         bool _isPageLoaded, _isLoggedIn, _enerjiDurum, _hapisKacKart = true, _hapisKacBaglanti = true, _rusvetNoPara = true,
-            _gucKartKullan, _zekaKartKullan, _hastaneKartKullan = true, _hastaneParaKullan = true, _zehirKartKullan = true,
-            _canKartKullan = true, _aldindi;
+            _gucKartKullan, _zekaKartKullan, _hastaneKartKullan = true, _hastaneParaKullan, _zehirKartKullan = true,
+            _canKartKullan = true, _enerjiKartKullan = true, _krediKas = false;
 
         private GameOps _game = GameOps.Non;
         private Int64 _atak, _baglanti, _respectPoints;
-        private int _can, _enerji, _enerjiToplam, _zehirToplam, _cantoplam, _risk, _zehir, _seviye, _para, _minSeviye, _taneZekaAl,
-            _taneGucAl;
+        private int _can, _enerji, _enerjiToplam, _zehirToplam, _cantoplam, _riskToplam, _risk, _zehir, _seviye, _para, _minSeviye, _taneZekaAl,
+            _taneGucAl, _riskHesapla;
         private int _zeka, _guc, _cazibe;
         private int _battlePoints;
         
         private HtmlElement elEnerji, elGuc, elZeka;
+
+        private void btnNewIp_Click(object sender, EventArgs e)
+        {
+            SetProxy("82.165.73.186.80");
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("https://www.chip.com.tr/ip-adresim-nedir");
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("http://sokakceteleri.com/");
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            RegistryKey registry = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+            registry.SetValue("ProxyServer", 0);
+            registry.SetValue("ProxyFalse","0");
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("http://www.sokakceteleri.com/?affiliate_guid=4129260");
+        }
+
+        private void cbKrediKas_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbKrediKas.Checked)
+            { _krediKas = true; }
+            else
+            { _krediKas = false; }
+        }
+
+        private void btnGo_Click(object sender, EventArgs e)
+        {
+            _game = GameOps.Kasil;
+            if (_enerji == _enerjiToplam)
+            { _enerjiDurum = true; }
+            Kasil(webBrowser1.Document);
+        }
+
+        private void cbRiskKart_CheckedChanged(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void cbEnerjiKart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbEnerjiKart.Checked)
+            { _enerjiKartKullan = true; }
+            else
+            { _enerjiKartKullan = false; }
+        }
 
         private void cbZekaAl_TextChanged(object sender, EventArgs e)
         {
@@ -159,8 +215,9 @@ namespace SokakCeteleriGameBot
             _game = GameOps.Savas;
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
-            var solMenu = MenuElement.LeftMenuElement(webBrowser1.Document);
-            solMenu.Children[1].Children[0].InvokeMember("click");
+            Savas(webBrowser1.Document);
+          //  var solMenu = MenuElement.LeftMenuElement(webBrowser1.Document);
+          //  solMenu.Children[1].Children[0].InvokeMember("click");
         }
 
         private void btnAntreman_Click(object sender, EventArgs e)
@@ -241,7 +298,7 @@ namespace SokakCeteleriGameBot
             var document = webBrowser1.Document;
             if (document == null) return;
 
-            LoginToGame(document);
+           // LoginToGame(document);
           //if (_isPageLoaded) { return; } 
 
             BilgileriGetir(document);
@@ -262,12 +319,23 @@ namespace SokakCeteleriGameBot
                 case GameOps.Harac:
                     HaracTopla(webBrowser1.Document);
                     break;
+                case GameOps.Kasil:
+                    Kasil(webBrowser1.Document);
+                    break;
                 default:
                     break;
             }
         }     
 
-        private void LoginToGame(HtmlDocument document)
+        private void SetProxy (string Proxy)
+        {
+            string key = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
+            RegistryKey RegKey = Registry.CurrentUser.OpenSubKey(key, true);
+            RegKey.SetValue("ProxyEnable", Proxy);
+            RegKey.SetValue("ProxyEnable", 1);
+        }
+
+      /*  private void LoginToGame(HtmlDocument document)
         {
             if (document.GetElementById("login-content") != null)
             {
@@ -277,6 +345,7 @@ namespace SokakCeteleriGameBot
                 _isLoggedIn = true;
             }
         }
+        */
 
         private void BilgileriGetir(HtmlDocument document)
         {
@@ -303,6 +372,37 @@ namespace SokakCeteleriGameBot
                     lbEnerji.Text = @"Enerji : " + _enerji;
                     lbRisk.Text = @"Risk : " + _risk;
                     lbZehir.Text = @"Zehir : " + _zehir;
+
+                    if (!cbRiskKart.Checked)
+                    {
+                        _riskToplam = Convert.ToInt16(userPropertiesElement.FirstChild.FirstChild.Children[3].FirstChild.GetAttribute("title")
+                          .Trim().Replace(" ", string.Empty).Substring(userPropertiesElement.FirstChild.FirstChild.Children[3].FirstChild.GetAttribute("title")
+                          .Trim().Replace(" ", string.Empty).Length - 3, 3));
+                    }
+                    ////////////////////////Risk Hesapla Baya Zor Oldu
+                    if (false)
+                    {
+                        if (_risk < 10)
+                        { _riskHesapla = 0; }
+                        else if (_risk < 100)
+                        { _riskHesapla = 1; }
+                        else
+                        { _riskHesapla = 2; }
+
+                        string str = userPropertiesElement.FirstChild.FirstChild.Children[3].FirstChild.GetAttribute("title")
+                              .Trim().Replace(" ", string.Empty);
+
+                        string neee = userPropertiesElement.FirstChild.FirstChild.Children[3].FirstChild.GetAttribute("title")
+                              .Trim().Replace(" ", string.Empty).Substring(28 + _riskHesapla, userPropertiesElement.FirstChild.FirstChild.Children[3].
+                              FirstChild.GetAttribute("title").Trim().Replace(" ", string.Empty).Length - (71 + (_risk.ToString().Length) - _riskHesapla));
+
+                        string nee = userPropertiesElement.FirstChild.FirstChild.Children[3].FirstChild.GetAttribute("title")
+                              .Trim().Replace(" ", string.Empty).Substring(0, userPropertiesElement.FirstChild.FirstChild.Children[3].
+                              FirstChild.GetAttribute("title").Trim().Replace(" ", string.Empty).Length - (43 + (_risk.ToString().Length) - _riskHesapla));
+                        _riskToplam = Convert.ToInt16(nee.Substring(nee.Length - 3));
+                    }
+                    
+
 
                     _cantoplam = Convert.ToInt16(userPropertiesElement.FirstChild.FirstChild.Children[1].FirstChild.GetAttribute("title")
                           .Trim().Replace(" ", string.Empty).Substring(userPropertiesElement.FirstChild.FirstChild.Children[1].FirstChild.GetAttribute("title")
@@ -423,6 +523,29 @@ namespace SokakCeteleriGameBot
             if (_enerji < 40) { _enerjiDurum = false; }
             if (!_enerjiDurum)
             {
+                if (_enerjiKartKullan)
+                {
+                    var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                    if (sagEnvanter != null)
+                    {
+                        var enerji = Material.FindCanElement(sagEnvanter);
+                        if (enerji != null)
+                        {
+                            enerji.InvokeMember("click");
+                            var kullan = ElementHelper.FindLeftInventoryElement(document);
+                            kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                            var ic = Material.FindUseMaterialElement(document);
+                            ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                        }
+                        else
+                        {
+                            cbEnerjiKart.Checked = false;
+                        }
+
+                    }
+                    var envanter = MenuElement.RightMenuElement(document);
+                    envanter.FirstChild.InvokeMember("click"); return;
+                }
                 var findDrink = EnerjiElement.FindDrinkElement(document);
 
                 if (_enerji==_enerjiToplam)
@@ -564,34 +687,35 @@ namespace SokakCeteleriGameBot
             var prison = ElementHelper.FindPrisonElement(document);
             if (prison != null)
             {
-                if (_hapisKacKart && Convert.ToInt16(prison.Children[0].Children[2].Children[0].Children[0].
+                var thisPrison = ElementHelper.FindThisIsPrisonElement(document);
+                if (thisPrison != null)
+                {
+                    if (_hapisKacKart && Convert.ToInt16(thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].
                     Children[0].Children[0].Children[1].InnerText) > 0)
-                {
-                    prison.Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
-                }
-                else if (_hapisKacBaglanti && _baglanti >= 78)
-                {
-                    prison.Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
-                }
-                else
-                {
-                    var hapistemiyim = ElementHelper.FindPrisonWhoElement(document);
-                    if (hapistemiyim.FirstChild.Children[1].Children[1].CanHaveChildren)
                     {
-                        prison.Children[0].Children[3].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                    }
+                    else if (_hapisKacBaglanti && _baglanti >= 78)
+                    {
+                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                        var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
+                        if (escapeConnect != null)
+                        {
+                            escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
+                                Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        }
                     }
                     else
                     {
-                        var sokak = MenuElement.LeftMenuElement(document);
-                        sokak.Children[1].FirstChild.InvokeMember("click");return;
+                        if (!thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
+                            FirstChild.GetAttribute("className").Contains("pad_item jail_icons jail_riot_1 json"))
+                        {
+                            thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
+                                FirstChild.InvokeMember("click"); return;
+                        }
                     }
                 }
-                var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
-                if (escapeConnect != null)
-                {
-                    escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
-                        Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click");return;
-                }
+                prison.InvokeMember("click"); return;
             }
             var police = ElementHelper.FindPoliceElement(document);
             if (police != null)
@@ -688,16 +812,34 @@ namespace SokakCeteleriGameBot
                 envanter.FirstChild.InvokeMember("click");return;
             }
             if (_enerji < 60) { _enerjiDurum = false; }
+            if (_enerji == _enerjiToplam)
+             { _enerjiDurum = true; }
             if (!_enerjiDurum)
             {
-                var findDrink = EnerjiElement.FindDrinkElement(document);
-                var sokak = MenuElement.LeftMenuElement(document);
-
-                if (_enerji == _enerjiToplam)
+                if (_enerjiKartKullan)
                 {
-                    _enerjiDurum = true; sokak.Children[1].Children[0].InvokeMember("click"); return;
+                    var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                    if (sagEnvanter != null)
+                    {
+                        var enerji = Material.FindEnerjiElement(sagEnvanter);
+                        if (enerji != null)
+                        {
+                            enerji.InvokeMember("click");
+                            var kullan = ElementHelper.FindLeftInventoryElement(document);
+                            kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                            var ic = Material.FindUseMaterialElement(document);
+                            ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                        }
+                        else
+                        {
+                            cbEnerjiKart.Checked = false;
+                        }
+                    }
+                    var envanter = MenuElement.RightMenuElement(document);
+                    envanter.FirstChild.InvokeMember("click"); return;
                 }
-                else if (findDrink != null)
+                var findDrink = EnerjiElement.FindDrinkElement(document);
+                if (findDrink != null)
                 {
                     HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
                     foreach (HtmlElement a in bul)
@@ -716,21 +858,13 @@ namespace SokakCeteleriGameBot
             }
             else if (_battlePoints > 0)
             {
-              //ÇAlışmıyor  var enerjilow = EnerjiElement.LowEnerjiFightElement(document);
-                var sokak = MenuElement.LeftMenuElement(document);
-                var dovusMenu = MenuElement.TopMenuFightElement(document);
-                var dovusAra = ElementHelper.FindFightSearchElement(document);
                 var dovusYap = ElementHelper.FindFightCompletedElement(document);
-
-                //if (enerjilow != null)
-                //{
-                //    elEnerji.InvokeMember("click"); _enerjiDurum = false; return;
-                //}
                 if (dovusYap != null)
                 {
                     dovusYap.InvokeMember("click");return;
                 }
-                else if (dovusAra != null)
+                var dovusAra = ElementHelper.FindFightSearchElement(document);
+                if (dovusAra != null)
                 {
                     dovusAra.Children[1].Children[0].Children[0].Children[1].Children[0].InnerText = (_seviye - _minSeviye).ToString();
                     dovusAra.Children[1].Children[0].Children[1].Children[1].Children[0].InnerText = (_seviye + 200).ToString();
@@ -738,14 +872,15 @@ namespace SokakCeteleriGameBot
                         (_respectPoints - ((_respectPoints / 100) * 1)).ToString();
                     dovusAra.Children[3].Children[0].Children[0].InvokeMember("click");return;
                 }
-                else if (dovusMenu != null)
+                var dovusMenu = MenuElement.TopMenuFightElement(document);
+                if (dovusMenu != null)
                 {
                     dovusMenu.InvokeMember("click");return;
                 }
-                else if (sokak != null)
-                {
-                    sokak.Children[1].Children[0].InvokeMember("click"); return;
-                }
+            }
+            else
+            {
+                _game = GameOps.Non;
             }
             var sokak1 = MenuElement.LeftMenuElement(document);
             sokak1.Children[1].FirstChild.InvokeMember("click");return;
@@ -755,16 +890,34 @@ namespace SokakCeteleriGameBot
         {
             if (document == null) return;
             if (_enerji < 10) { _enerjiDurum = false; }
+            if (_enerji == _enerjiToplam)
+            { _enerjiDurum = true; }
             if (!_enerjiDurum)
             {
-                var findDrink = EnerjiElement.FindDrinkElement(document);
-                var sokak = MenuElement.LeftMenuElement(document);
-
-                if (_enerji == _enerjiToplam)
+                if (_enerjiKartKullan)
                 {
-                    _enerjiDurum = true; sokak.Children[1].Children[0].InvokeMember("click"); return;
+                    var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                    if (sagEnvanter != null)
+                    {
+                        var enerji = Material.FindEnerjiElement(sagEnvanter);
+                        if (enerji != null)
+                        {
+                            enerji.InvokeMember("click");
+                            var kullan = ElementHelper.FindLeftInventoryElement(document);
+                            kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                            var ic = Material.FindUseMaterialElement(document);
+                            ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                        }
+                        else
+                        {
+                            cbEnerjiKart.Checked = false;
+                        }
+                    }
+                    var envanter = MenuElement.RightMenuElement(document);
+                    envanter.FirstChild.InvokeMember("click"); return;
                 }
-                else if (findDrink != null)
+                var findDrink = EnerjiElement.FindDrinkElement(document);
+                if (findDrink != null)
                 {
                     HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
                     foreach (HtmlElement a in bul)
@@ -781,7 +934,7 @@ namespace SokakCeteleriGameBot
                     elEnerji.InvokeMember("click"); ; return;
                 }
             }
-                var harac = ElementHelper.FindTributeElement(document);
+            var harac = ElementHelper.FindTributeElement(document);
                 if (harac != null)
                 {
                 if (750 > Convert.ToInt32(harac.Children[0].Children[1].Children[6].Children[0].Children[0].InnerText))
@@ -799,34 +952,35 @@ namespace SokakCeteleriGameBot
             var prison = ElementHelper.FindPrisonElement(document);
             if (prison != null)
             {
-                if (_hapisKacKart && Convert.ToInt16(prison.Children[0].Children[2].Children[0].Children[0].
+                var thisPrison = ElementHelper.FindThisIsPrisonElement(document);
+                if (thisPrison != null)
+                {
+                    if (_hapisKacKart && Convert.ToInt16(thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].
                     Children[0].Children[0].Children[1].InnerText) > 0)
-                {
-                    prison.Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
-                }
-                else if (_hapisKacBaglanti && _baglanti >= 78)
-                {
-                    prison.Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
-                }
-                else
-                {
-                    var hapistemiyim = ElementHelper.FindPrisonWhoElement(document);
-                    if (hapistemiyim.FirstChild.Children[1].Children[1].CanHaveChildren)
                     {
-                        prison.Children[0].Children[3].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                    }
+                    else if (_hapisKacBaglanti && _baglanti >= 78)
+                    {
+                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                        var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
+                        if (escapeConnect != null)
+                        {
+                            escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
+                                Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        }
                     }
                     else
                     {
-                        var sokak = MenuElement.LeftMenuElement(document);
-                        sokak.Children[1].FirstChild.InvokeMember("click"); return;
+                        if (!thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
+                            FirstChild.GetAttribute("className").Contains("pad_item jail_icons jail_riot_1 json"))
+                        {
+                            thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
+                                FirstChild.InvokeMember("click"); return;
+                        }
                     }
                 }
-                var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
-                if (escapeConnect != null)
-                {
-                    escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
-                        Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
-                }
+                prison.InvokeMember("click"); return;
             }
             var police = ElementHelper.FindPoliceElement(document);
             if (police != null)
@@ -923,16 +1077,34 @@ namespace SokakCeteleriGameBot
                 envanter.FirstChild.InvokeMember("click"); return;
             }
             if (_enerji < 60) { _enerjiDurum = false; }
+            if (_enerji == _enerjiToplam)
+            { _enerjiDurum = true; }
             if (!_enerjiDurum)
             {
-                var findDrink = EnerjiElement.FindDrinkElement(document);
-                var sokak = MenuElement.LeftMenuElement(document);
-
-                if (_enerji == _enerjiToplam)
+                if (_enerjiKartKullan)
                 {
-                    _enerjiDurum = true; sokak.Children[1].Children[0].InvokeMember("click"); return;
+                    var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                    if (sagEnvanter != null)
+                    {
+                        var enerji = Material.FindEnerjiElement(sagEnvanter);
+                        if (enerji != null)
+                        {
+                            enerji.InvokeMember("click");
+                            var kullan = ElementHelper.FindLeftInventoryElement(document);
+                            kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                            var ic = Material.FindUseMaterialElement(document);
+                            ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                        }
+                        else
+                        {
+                            cbEnerjiKart.Checked = false;
+                        }
+                    }
+                    var envanter = MenuElement.RightMenuElement(document);
+                    envanter.FirstChild.InvokeMember("click"); return;
                 }
-                else if (findDrink != null)
+                var findDrink = EnerjiElement.FindDrinkElement(document);
+                if (findDrink != null)
                 {
                     HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
                     foreach (HtmlElement a in bul)
@@ -957,9 +1129,8 @@ namespace SokakCeteleriGameBot
                 var dov = ElementHelper.Dov(document);
                 if (dov != null)
                 {
-                    dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click");
+                    dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
                 }
-                return;
             }
             var gorevAra = ElementHelper.FindQuestSearchElement(document);
             if (gorevAra != null)
@@ -970,24 +1141,580 @@ namespace SokakCeteleriGameBot
             if (gorevHazir != null)
             {
                 var sokak = MenuElement.LeftMenuElement(document);
-                sokak.Children[1].FirstChild.InvokeMember("click");return;
+                sokak.Children[1].FirstChild.InvokeMember("click"); return;
             }
-            //var gorevButton = ElementHelper.FindQuestButtonElement(document);
-            //if (gorevButton != null)
-            //{
-            //    gorevButton.InvokeMember("click");return;
-            //}
             var gorevAl = ElementHelper.FindQuestElement(document);
             if (gorevAl != null)
             {
-                gorevAl.InvokeMember("click");return;
+                gorevAl.InvokeMember("click"); return;
             }
             var sagMenu = MenuElement.RightMenuElement(document);
-            if (sagMenu != null)
-            {
                 sagMenu.Children[6].InvokeMember("click");return;
-            }
         }
 
+        private void Kasil(HtmlDocument document)
+        {
+            if (document == null) return;
+            var prison = ElementHelper.FindPrisonElement(document);
+            if (prison != null)
+            {
+                var thisPrison = ElementHelper.FindThisIsPrisonElement(document);
+                if (thisPrison != null)
+                {
+                    if (_hapisKacKart && Convert.ToInt16(thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].
+                    Children[0].Children[0].Children[1].InnerText) > 0)
+                    {
+                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                    }
+                    else if (_hapisKacBaglanti && _baglanti >= 78)
+                    {
+                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                        var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
+                        if (escapeConnect != null)
+                        {
+                            escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
+                                Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        }
+                    }
+                    else
+                    {
+                        if (!thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
+                            FirstChild.GetAttribute("className").Contains("pad_item jail_icons jail_riot_1 json"))
+                        {
+                            thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
+                                FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                }
+                prison.InvokeMember("click"); return;
+            }
+            var police = ElementHelper.FindPoliceElement(document);
+            if (police != null)
+            {
+                if (_rusvetNoPara)
+                {
+                    int rusvet1 = Convert.ToInt16(police.Children[1].Children[0].GetAttribute("value").
+                                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[1].Children[0].
+                                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet1)
+                    { police.Children[1].Children[0].InvokeMember("click"); return; }
+                    int rusvet2 = Convert.ToInt16(police.Children[2].Children[0].GetAttribute("value").
+                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[2].Children[0].
+                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet2)
+                    { police.Children[2].Children[0].InvokeMember("click"); return; }
+                    int rusvet3 = Convert.ToInt16(police.Children[3].Children[0].GetAttribute("value").
+                        Trim().Replace(" ", string.Empty).Substring(0, police.Children[3].Children[0].
+                        GetAttribute("value").Trim().Replace(" ", string.Empty).Length - 13));
+                    if ((_para / 1000) >= rusvet3)
+                    { police.Children[3].Children[0].InvokeMember("click"); return; }
+                    else
+                    { cbPolisNoPara.Checked = false; }
+                }
+                police.Children[4].Children[0].InvokeMember("click"); return;
+            }
+            var hospital = ElementHelper.FindHospitalElement(document);
+            if (hospital != null)
+            {
+                if (hospital.FirstChild.Children[2].CanHaveChildren)
+                {
+                    if (0 < Convert.ToInt16(hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.
+                                        FirstChild.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
+                    {
+                        hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                    }
+                    var paraYok = EnerjiElement.LowEnerjiTrainingElement(document);
+                    if (paraYok != null && paraYok.Children[2].GetAttribute("className").Contains("getin b"))
+                    {
+                        _hastaneKartKullan = false; cbHastanePara.Checked = false;
+                    }
+                    if (_hastaneParaKullan)
+                    {
+                        hospital.FirstChild.Children[2].FirstChild.Children[1].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                    }
+                }
+                var sokak = MenuElement.LeftMenuElement(document);
+                sokak.Children[1].FirstChild.InvokeMember("click"); return;
+            }
+            if (_zehir + 20 >= _zehirToplam && _zehirKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+
+                    var zehir = Material.FindZehirElement(sagEnvanter);
+                    if (zehir != null)
+                    {
+                        zehir.InvokeMember("click");
+                        var kullan = ElementHelper.FindLeftInventoryElement(document);
+                        kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var ic = Material.FindUseMaterialElement(document);
+                        ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        cbZehirKart.Checked = false;
+                    }
+                }
+                var envanter = MenuElement.RightMenuElement(document);
+                envanter.FirstChild.InvokeMember("click"); return;
+            }
+            if (_can < 6 && _canKartKullan)
+            {
+                var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                if (sagEnvanter != null)
+                {
+                    var can = Material.FindCanElement(sagEnvanter);
+                    if (can != null)
+                    {
+                        can.InvokeMember("click");
+                        var kullan = ElementHelper.FindLeftInventoryElement(document);
+                        kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                        var ic = Material.FindUseMaterialElement(document);
+                        ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+                        cbCanKart.Checked = false;
+                    }
+
+                }
+                var envanter = MenuElement.RightMenuElement(document);
+                envanter.FirstChild.InvokeMember("click"); return;
+            }
+            if (_enerji < 50) { _enerjiDurum = false; }
+            if (_enerji == _enerjiToplam)
+            { _enerjiDurum = true; }
+            if (!_enerjiDurum)
+            {
+                if (_enerjiKartKullan)
+                {
+                    var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                    if (sagEnvanter != null)
+                    {
+                        var enerji = Material.FindEnerjiElement(sagEnvanter);
+                        if (enerji != null)
+                        {
+                            enerji.InvokeMember("click");
+                            var kullan = ElementHelper.FindLeftInventoryElement(document);
+                            kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                            var ic = Material.FindUseMaterialElement(document);
+                            ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                        }
+                        else
+                        {
+                            cbEnerjiKart.Checked = false;
+                        }
+                    }
+                    var envanter = MenuElement.RightMenuElement(document);
+                    envanter.FirstChild.InvokeMember("click"); return;
+                }
+                var findDrink = EnerjiElement.FindDrinkElement(document);
+                if (findDrink != null)
+                {
+                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bul)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                }
+                else
+                {
+                    elEnerji.InvokeMember("click"); ; return;
+                }
+            }
+            var basla = document.GetElementById("map");
+            if (basla != null)
+            {
+                if (_krediKas && _seviye > 4)
+                {
+                    _game = GameOps.Savas; _minSeviye = 5;
+                }
+                var polis = Saldir.Polis(basla);
+                if (polis != null)
+                {
+                    polis.InvokeMember("click");
+                    var dov = Saldir.Saldirr(webBrowser1.Document);
+                    if (dov != null)
+                    {
+                        dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                    }
+                }
+                if (_seviye > 2)
+                {
+                    var atm = Saldir.Atm(basla);
+                    if (atm != null)
+                    {
+                        atm.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click");return;
+                        }
+                    }
+                    var kabadayi = Saldir.Kabadayi(basla);
+                    if (kabadayi != null)
+                    {
+                        kabadayi.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var isAdami = Saldir.IsAdami(basla);
+                    if (isAdami != null)
+                    {
+                        isAdami.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var araba1 = Saldir.Araba1(basla);
+                    if (araba1 != null)
+                    {
+                        araba1.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var araba2 = Saldir.Araba2(basla);
+                    if (araba2 != null)
+                    {
+                        araba2.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var dansoz = Saldir.Dansoz(basla);
+                    if (dansoz != null)
+                    {
+                        dansoz.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var yonetici = Saldir.Yonetici(basla);
+                    if (yonetici != null)
+                    {
+                        yonetici.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var isKadini = Saldir.IsKadini(basla);
+                    if (isKadini != null)
+                    {
+                        isKadini.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var satici = Saldir.SigaraSaticisi(basla);
+                    if (satici != null)
+                    {
+                        satici.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var holigan = Saldir.Holigan(basla);
+                    if (holigan != null)
+                    {
+                        holigan.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var telefon = Saldir.Telefon(basla);
+                    if (telefon != null)
+                    {
+                        telefon.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var upi = Saldir.Upi(basla);
+                    if (upi != null)
+                    {
+                        upi.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var taksi = Saldir.Taksi(basla);
+                    if (taksi != null)
+                    {
+                        taksi.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                }
+                else
+                {
+                    var ogretmen = Saldir.Ogretmen(basla);
+                    if (ogretmen != null)
+                    {
+                        ogretmen.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var posta = Saldir.Posta(basla);
+                    if (posta != null)
+                    {
+                        posta.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var fanatik = Saldir.fanatik(basla);
+                    if (fanatik != null)
+                    {
+                        fanatik.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var tabela = Saldir.Tabela(basla);
+                    if (tabela != null)
+                    {
+                        tabela.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var hamal = Saldir.Hamal(basla);
+                    if (hamal != null)
+                    {
+                        hamal.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var anne = Saldir.Anne(basla);
+                    if (anne != null)
+                    {
+                        anne.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var kopek = Saldir.KopekliGenc(basla);
+                    if (kopek != null)
+                    {
+                        kopek.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var bisiklet = Saldir.BisikletliGenc(basla);
+                    if (bisiklet != null)
+                    {
+                        bisiklet.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var kopekliKiz = Saldir.KopekliKiz(basla);
+                    if (kopekliKiz != null)
+                    {
+                        kopekliKiz.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var haylaz = Saldir.Haylaz(basla);
+                    if (haylaz != null)
+                    {
+                        haylaz.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var dokuntu = Saldir.Dokuntu(basla);
+                    if (dokuntu != null)
+                    {
+                        dokuntu.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var musluk = Saldir.ItfaiyeMuslugu(basla);
+                    if (musluk != null)
+                    {
+                        musluk.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var kaykayci = Saldir.Kaykayci(basla);
+                    if (kaykayci != null)
+                    {
+                        kaykayci.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var gencKiz = Saldir.GencKiz(basla);
+                    if (gencKiz != null)
+                    {
+                        gencKiz.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var varil = Saldir.Variller(basla);
+                    if (varil != null)
+                    {
+                        varil.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var barikat = Saldir.Barikat(basla);
+                    if (barikat != null)
+                    {
+                        barikat.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var logar = Saldir.Logar(basla);
+                    if (logar != null)
+                    {
+                        logar.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var kopekk = Saldir.Kopek(basla);
+                    if (kopekk != null)
+                    {
+                        kopekk.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var sarhos = Saldir.Sarhos(basla);
+                    if (sarhos != null)
+                    {
+                        sarhos.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var kovalar = Saldir.Kovalar(basla);
+                    if (kovalar != null)
+                    {
+                        kovalar.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var postaci = Saldir.Postaci(basla);
+                    if (postaci != null)
+                    {
+                        postaci.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var asiklar = Saldir.Asiklar(basla);
+                    if (asiklar != null)
+                    {
+                        asiklar.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var kucukKiz = Saldir.KucukKiz(basla);
+                    if (kucukKiz != null)
+                    {
+                        kucukKiz.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                }
+
+            }
+
+            var sokak1 = MenuElement.LeftMenuElement(document);
+            sokak1.Children[1].FirstChild.InvokeMember("click"); return;
+        }
     }
 }

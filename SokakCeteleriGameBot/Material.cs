@@ -34,6 +34,17 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement FindEnerjiElement(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("img");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/803.jpg"))
+                { return e; }
+            }
+            return null;
+        }
+
         public static HtmlElement FindZeka1Element(HtmlElement document)
         {
             var elements = document.GetElementsByTagName("img");
@@ -95,6 +106,28 @@ namespace SokakCeteleriGameBot
             foreach (HtmlElement e in elements)
             {
                 if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/833.jpg"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindNakit1Element(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("img");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/801.jpg"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindNakit100Element(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("img");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/824.jpg"))
                 { return e; }
             }
             return null;

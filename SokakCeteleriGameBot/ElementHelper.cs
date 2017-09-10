@@ -167,21 +167,6 @@ namespace SokakCeteleriGameBot
                     return e.Children[2];
                 }
             }
-            //var elements = document.GetElementsByTagName("table");
-            //foreach (HtmlElement e in elements)
-            //{
-            //    if (e.GetAttribute("if").Contains("qListContainer"))
-            //    {
-            //        var abc = e.GetElementsByTagName("input");
-            //        foreach (HtmlElement a in abc)
-            //        {
-            //            if (a.GetAttribute("className").Contains("btn go"))
-            //            {
-            //                return a;
-            //            }
-            //        }
-            //    }
-            //}
             return null;
         }
 
@@ -310,20 +295,23 @@ namespace SokakCeteleriGameBot
 
         public static HtmlElement FindPrisonElement(HtmlDocument document)
         {
-            var elements = document.GetElementsByTagName("table");
+            var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
             {
-                if (e.GetAttribute("cellpadding").Contains("4")&& e.GetAttribute("cellspacing").Contains("0"))
-                { return e; }
+                if (e.GetAttribute("className").Contains("user-box u-jl utt") && e.Children[1].FirstChild.InnerText == "Hapistesin")
+                { return e.Children[1].FirstChild; }
             }
             return null;
         }
 
-        public static HtmlElement FindPrisonWhoElement(HtmlDocument document)
+        public static HtmlElement FindThisIsPrisonElement(HtmlDocument document)
         {
-            var elements = document.GetElementById("msgbox");
-            if (elements != null)
-                { return elements; }
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("modprison"))
+                { return e; }
+            }
             return null;
         }
 
