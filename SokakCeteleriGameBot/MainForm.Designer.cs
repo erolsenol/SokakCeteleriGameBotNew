@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cbKrediKas = new System.Windows.Forms.CheckBox();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -82,7 +83,8 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.startPanel = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.cbKrediKas = new System.Windows.Forms.CheckBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.btnBilekGures = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.startPanel.SuspendLayout();
@@ -90,6 +92,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnBilekGures);
+            this.panel1.Controls.Add(this.button6);
             this.panel1.Controls.Add(this.cbKrediKas);
             this.panel1.Controls.Add(this.button5);
             this.panel1.Controls.Add(this.button4);
@@ -135,6 +139,17 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1405, 122);
             this.panel1.TabIndex = 0;
+            // 
+            // cbKrediKas
+            // 
+            this.cbKrediKas.AutoSize = true;
+            this.cbKrediKas.Location = new System.Drawing.Point(711, 80);
+            this.cbKrediKas.Name = "cbKrediKas";
+            this.cbKrediKas.Size = new System.Drawing.Size(115, 17);
+            this.cbKrediKas.TabIndex = 39;
+            this.cbKrediKas.Text = "5. Seviyede Savaş";
+            this.cbKrediKas.UseVisualStyleBackColor = true;
+            this.cbKrediKas.CheckedChanged += new System.EventHandler(this.cbKrediKas_CheckedChanged);
             // 
             // button5
             // 
@@ -698,16 +713,25 @@
             this.webBrowser1.Size = new System.Drawing.Size(1405, 630);
             this.webBrowser1.TabIndex = 5;
             // 
-            // cbKrediKas
+            // button6
             // 
-            this.cbKrediKas.AutoSize = true;
-            this.cbKrediKas.Location = new System.Drawing.Point(711, 80);
-            this.cbKrediKas.Name = "cbKrediKas";
-            this.cbKrediKas.Size = new System.Drawing.Size(115, 17);
-            this.cbKrediKas.TabIndex = 39;
-            this.cbKrediKas.Text = "5. Seviyede Savaş";
-            this.cbKrediKas.UseVisualStyleBackColor = true;
-            this.cbKrediKas.CheckedChanged += new System.EventHandler(this.cbKrediKas_CheckedChanged);
+            this.button6.Location = new System.Drawing.Point(913, 65);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 40;
+            this.button6.Text = "button6";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // btnBilekGures
+            // 
+            this.btnBilekGures.Location = new System.Drawing.Point(508, 3);
+            this.btnBilekGures.Name = "btnBilekGures";
+            this.btnBilekGures.Size = new System.Drawing.Size(89, 29);
+            this.btnBilekGures.TabIndex = 41;
+            this.btnBilekGures.Text = "Bilek Güreşi";
+            this.btnBilekGures.UseVisualStyleBackColor = true;
+            this.btnBilekGures.Click += new System.EventHandler(this.btnBilekGures_Click);
             // 
             // MainForm
             // 
@@ -790,6 +814,8 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox cbKrediKas;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button btnBilekGures;
     }
 }
 

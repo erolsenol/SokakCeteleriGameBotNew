@@ -7,6 +7,7 @@
         Savas = 2,
         Gorev = 3,
         Harac = 4,
-        Kasil = 5
+        Kasil = 5,
+        BilekGuresi = 6
     }
 }
