@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using Quartz;
+using Quartz.Impl;
 
 // ReSharper disable PossibleNullReferenceException
 
@@ -8,6 +10,7 @@ namespace SokakCeteleriGameBot
 {
     public partial class MainForm : Form
     {
+        System.Threading.Timer _timer;
         //  readonly WebBrowser _webBrowser;
         bool _isPageLoaded, _isLoggedIn, _enerjiDurum, _hapisKacKart = true, _hapisKacBaglanti = true, _rusvetNoPara = true,
             _gucKartKullan, _zekaKartKullan, _hastaneKartKullan = true, _hastaneParaKullan, _zehirKartKullan = true,
@@ -313,8 +316,8 @@ namespace SokakCeteleriGameBot
             var document = webBrowser1.Document;
             if (document == null) return;
 
-           // LoginToGame(document);
-          //if (_isPageLoaded) { return; } 
+          //  LoginToGame(document);
+         // if (_isPageLoaded) { return; } 
 
             BilgileriGetir(document);
             GetTraniningPoints(document);
@@ -353,7 +356,21 @@ namespace SokakCeteleriGameBot
             RegKey.SetValue("ProxyEnable", 1);
         }
 
-      /*  private void LoginToGame(HtmlDocument document)
+        private void StartTimer(int dakika, int saniye)
+        {
+            TimeSpan span = new TimeSpan(0,dakika,saniye+5);
+            TimeSpan disablePeriodic = new TimeSpan(0, 0, 0, 0, -1);
+            _timer = new System.Threading.Timer(timer_timerCallback, null, span,disablePeriodic);
+        }
+
+        public void timer_timerCallback(object state)
+        {
+            webBrowser1.Refresh();
+            _game = GameOps.BilekGuresi;
+            _timer.Dispose();   
+        }
+
+        private void LoginToGame(HtmlDocument document)
         {
             if (document.GetElementById("login-content") != null)
             {
@@ -363,7 +380,6 @@ namespace SokakCeteleriGameBot
                 _isLoggedIn = true;
             }
         }
-        */
 
         private void BilgileriGetir(HtmlDocument document)
         {
@@ -427,7 +443,7 @@ namespace SokakCeteleriGameBot
                           .Trim().Replace(" ", string.Empty).Substring(userPropertiesElement.FirstChild.FirstChild.Children[1].FirstChild.GetAttribute("title")
                           .Trim().Replace(" ", string.Empty).Length - 3, 3));
 
-                     _enerjiToplam =Convert.ToInt16(userPropertiesElement.Children[0].Children[0].Children[2].Children[0].GetAttribute("title")
+                    _enerjiToplam =Convert.ToInt16(userPropertiesElement.Children[0].Children[0].Children[2].Children[0].GetAttribute("title")
                         .Trim().Replace(" ", string.Empty).Substring(userPropertiesElement.Children[0].Children[0].Children[2]
                         .Children[0].GetAttribute("title").Trim().Replace(" ", string.Empty).Length - 3, 3));
 
@@ -451,12 +467,15 @@ namespace SokakCeteleriGameBot
             var trainingInfosElement = ElementHelper.FindTrainingElement(document);
             if (trainingInfosElement != null)
             {
-                var bpItems = trainingInfosElement.Children[0].GetElementsByTagName("span");
-
-                if (bpItems[0].GetAttribute("className").Contains("battle_points"))
+                var bpItems = trainingInfosElement.GetElementsByTagName("span");
+                foreach (HtmlElement e in bpItems)
                 {
-                    _battlePoints = int.Parse(bpItems[0].InnerText);
+                    if (e.GetAttribute("className").Contains("battle_points"))
+                    {
+                        _battlePoints = int.Parse(e.InnerText);
+                    }
                 }
+                
                 //Saygı
                 {
                     string respectk = trainingInfosElement.Children[0].Children[0].InnerText.Trim().Replace(" ", string.Empty).
@@ -540,6 +559,10 @@ namespace SokakCeteleriGameBot
         {
             if (document == null) return;
             if (_enerji < 40) { _enerjiDurum = false; }
+            else if (_enerji == _enerjiToplam)
+            {
+                _enerjiDurum = true;
+            }
             if (!_enerjiDurum)
             {
                 if (_enerjiKartKullan)
@@ -547,7 +570,7 @@ namespace SokakCeteleriGameBot
                     var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
                     if (sagEnvanter != null)
                     {
-                        var enerji = Material.FindCanElement(sagEnvanter);
+                        var enerji = Material.FindEnerjiElement(sagEnvanter);
                         if (enerji != null)
                         {
                             enerji.InvokeMember("click");
@@ -558,7 +581,7 @@ namespace SokakCeteleriGameBot
                         }
                         else
                         {
-                            cbEnerjiKart.Checked = false;
+                            cbEnerjiKart.Checked = false; elEnerji.InvokeMember("click"); return;
                         }
 
                     }
@@ -567,9 +590,9 @@ namespace SokakCeteleriGameBot
                 }
                 var findDrink = EnerjiElement.FindDrinkElement(document);
 
-                if (_enerji==_enerjiToplam)
+                if (_enerji == _enerjiToplam)
                 {
-                    _enerjiDurum = true;webBrowser1.Refresh(); return;
+                    _enerjiDurum = true; webBrowser1.Refresh(); return;
                 }
                 else if (findDrink != null)
                 {
@@ -584,11 +607,31 @@ namespace SokakCeteleriGameBot
                     }
                 }
                 else
-	            {
-                    elEnerji.InvokeMember("click"); ;return;
+                {
+                    elEnerji.InvokeMember("click"); ; return;
                 }
             }
-            else if (_zeka > 0)
+            if (_zeka > 0)
+            {
+                var enerjilow = EnerjiElement.LowEnerjiTrainingElement(document);
+                var ant = ElementHelper.FindTrainingContentElement(document);
+                var completed = ElementHelper.FindTrainingCompletedElement(document);
+                if (enerjilow != null)
+                {
+
+                    elEnerji.InvokeMember("click"); _enerjiDurum = false; return;
+                }
+
+                else if (ant != null)
+                {
+                    ant.Children[1].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                }
+                else
+                {
+                    elZeka.InvokeMember("click"); return;
+                }
+            }
+           else if (_guc > 0)
             {
                 var enerjilow = EnerjiElement.LowEnerjiTrainingElement(document);
                 var ant = ElementHelper.FindTrainingContentElement(document);
@@ -601,37 +644,15 @@ namespace SokakCeteleriGameBot
                 
                 else if (ant != null)
                 {
-                    ant.Children[1].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click");return;
-                }
-                else
-	            {
-                    elZeka.InvokeMember("click");return;
-                }
-            }
-            else if (_guc > 0)
-            {
-                var enerjilow = EnerjiElement.LowEnerjiTrainingElement(document);
-                var ant = ElementHelper.FindTrainingContentElement(document);
-                var completed = ElementHelper.FindTrainingCompletedElement(document);
-                if (enerjilow != null)
-                {
-
-                    elEnerji.InvokeMember("click"); _enerjiDurum = false; return;
-                }
-                else if (completed != null)
-                {
-                    elGuc.InvokeMember("click"); return;
-                }
-                else if (ant != null)
-                {
-                    ant.Children[1].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                    var gucTik = ElementHelper.GucTikElement(ant);
+                    gucTik.InvokeMember("click"); return;
                 }
                 else
                 {
                     elGuc.InvokeMember("click"); return;
                 }
             }
-            else if (_zekaKartKullan)
+            if (_zekaKartKullan)
             {
                 var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
                 if (sagEnvanter != null)
@@ -660,11 +681,11 @@ namespace SokakCeteleriGameBot
                         _zekaKartKullan = false; webBrowser1.Refresh(); cbZekaKart.Visible = false; return;
                     }
                 }
-               
+
                 var sagMenu = MenuElement.RightMenuElement(document);
                 sagMenu.FirstChild.InvokeMember("click"); return;
             }
-            else if (_gucKartKullan)
+            if (_gucKartKullan)
             {
                 var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
                 if (sagEnvanter != null)
@@ -693,11 +714,26 @@ namespace SokakCeteleriGameBot
                         _gucKartKullan = false; webBrowser1.Refresh(); cbGuckart.Visible = false; return;
                     }
                 }
-               
+
                 var sagMenu = MenuElement.RightMenuElement(document);
                 sagMenu.FirstChild.InvokeMember("click"); return;
             }
-            {_game = GameOps.Non; return; }
+            if (_cazibe > 0)
+            {
+                var kizAra = EnerjiElement.FindKizElement(document);
+                if (kizAra != null)
+                {
+                    var kizTikla = EnerjiElement.FindKizTiklaElement(kizAra, _seviye);
+                    if (kizTikla != null)
+                    {
+                        kizTikla.InvokeMember("click");return;
+                    }
+                }
+                var cazibeTikla = ElementHelper.FindRightTrainingElement(document);
+                cazibeTikla.Children[2].InvokeMember("click");return;
+            }
+            else
+            {_game = GameOps.Non; return;}
         }
 
         private void Savas(HtmlDocument document)
@@ -899,8 +935,9 @@ namespace SokakCeteleriGameBot
             }
             else
             {
-                _game = GameOps.Non;
+                _game = GameOps.Non;return;
             }
+            
             var sokak1 = MenuElement.LeftMenuElement(document);
             sokak1.Children[1].FirstChild.InvokeMember("click");return;
         }
@@ -1095,7 +1132,7 @@ namespace SokakCeteleriGameBot
                 var envanter = MenuElement.RightMenuElement(document);
                 envanter.FirstChild.InvokeMember("click"); return;
             }
-            if (_enerji < 60) { _enerjiDurum = false; }
+            if (_enerji < 10) { _enerjiDurum = false; }
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
             if (!_enerjiDurum)
@@ -1752,11 +1789,15 @@ namespace SokakCeteleriGameBot
                         DateTime guresSure =  Convert.ToDateTime(thisPrison.FirstChild.Children[1].FirstChild.Children[4].Children[1].Children[1].FirstChild.InnerText);
                         if (guresSure < hapisSure)
                         {
-                            MessageBox.Show("Katılıyorsun");
+                            StartTimer(int.Parse(guresSure.Minute.ToString()), int.Parse(guresSure.Second.ToString()));
+                            _game = GameOps.Non;
+                            return;
                         }
                         else
                         {
-                            MessageBox.Show("Katılamıyorsun");
+                            StartTimer(int.Parse(hapisSure.Minute.ToString()), int.Parse(hapisSure.Second.ToString()));  
+                            _game = GameOps.Non;
+                            return;
                         }
                     }
                 }
@@ -2187,6 +2228,23 @@ namespace SokakCeteleriGameBot
             var sokak1 = MenuElement.LeftMenuElement(document);
             sokak1.Children[1].FirstChild.InvokeMember("click"); return;
         }
+
+        private IScheduler Baslat()
+        {
+            ISchedulerFactory schedFact = new StdSchedulerFactory();
+            IScheduler sched = schedFact.GetScheduler();
+            if (!sched.IsStarted)
+                sched.Start();
+            return sched;
+        }
+        private void GoreviTetikle(DateTime baslamaZamani)
+        {
+            IScheduler sched = Baslat();
+            IJobDetail gorev = JobBuilder.Create<JobTest1>().WithIdentity("Gorev").Build();
+            ISimpleTrigger trigger = (ISimpleTrigger)TriggerBuilder.Create().WithIdentity("Gorev").StartAt(baslamaZamani).Build();
+            sched.ScheduleJob(gorev, trigger);
+        }
+
 
      /*   private void Sat(HtmlDocument document)
         {

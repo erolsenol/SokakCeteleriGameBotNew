@@ -345,6 +345,17 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement GucTikElement(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("pad_item training_train train_5_on"))
+                { return e; }
+            }
+            return null;
+        }
+
         public static HtmlElement FindGangHomeElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");

@@ -77,5 +77,184 @@ namespace SokakCeteleriGameBot
             }
             return null;
         }
+
+        public static HtmlElement FindKizElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("inventory_slotsw"))
+                {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindKizTiklaElement(HtmlElement document, int seviye)
+        {
+            var elements = document.GetElementsByTagName("img");
+            if (seviye > 59)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/716.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 55)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/715.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 51)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/714.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 47)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/713.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 43)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/712.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 39)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/711.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 35)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/710.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 31)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/709.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 27)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/708.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 23)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/707.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 19)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/706.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 15)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/705.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 11)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/704.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 7)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/703.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else if (seviye > 3)
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/702.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            else
+            {
+                foreach (HtmlElement e in elements)
+                {
+                    if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/srv/eu.1/item/701.jpg"))
+                    {
+                        return e;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

@@ -28,7 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.btnBilekGures = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.cbKrediKas = new System.Windows.Forms.CheckBox();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -83,8 +87,7 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.startPanel = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.button6 = new System.Windows.Forms.Button();
-            this.btnBilekGures = new System.Windows.Forms.Button();
+            this.GuresTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.startPanel.SuspendLayout();
@@ -92,6 +95,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.btnBilekGures);
             this.panel1.Controls.Add(this.button6);
             this.panel1.Controls.Add(this.cbKrediKas);
@@ -137,8 +141,38 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1405, 122);
+            this.panel1.Size = new System.Drawing.Size(1362, 122);
             this.panel1.TabIndex = 0;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(401, 80);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(60, 17);
+            this.checkBox1.TabIndex = 42;
+            this.checkBox1.Text = "Saygım";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // btnBilekGures
+            // 
+            this.btnBilekGures.Location = new System.Drawing.Point(508, 3);
+            this.btnBilekGures.Name = "btnBilekGures";
+            this.btnBilekGures.Size = new System.Drawing.Size(89, 29);
+            this.btnBilekGures.TabIndex = 41;
+            this.btnBilekGures.Text = "Bilek Güreşi";
+            this.btnBilekGures.UseVisualStyleBackColor = true;
+            this.btnBilekGures.Click += new System.EventHandler(this.btnBilekGures_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(913, 65);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 40;
+            this.button6.Text = "button6";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // cbKrediKas
             // 
@@ -297,7 +331,7 @@
             this.panel2.Controls.Add(this.cbZekaKart);
             this.panel2.Controls.Add(this.cbGuckart);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(1205, 0);
+            this.panel2.Location = new System.Drawing.Point(1162, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(200, 122);
             this.panel2.TabIndex = 26;
@@ -710,35 +744,15 @@
             this.webBrowser1.Location = new System.Drawing.Point(0, 122);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(1405, 630);
+            this.webBrowser1.Size = new System.Drawing.Size(1362, 619);
             this.webBrowser1.TabIndex = 5;
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(913, 65);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 40;
-            this.button6.Text = "button6";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // btnBilekGures
-            // 
-            this.btnBilekGures.Location = new System.Drawing.Point(508, 3);
-            this.btnBilekGures.Name = "btnBilekGures";
-            this.btnBilekGures.Size = new System.Drawing.Size(89, 29);
-            this.btnBilekGures.TabIndex = 41;
-            this.btnBilekGures.Text = "Bilek Güreşi";
-            this.btnBilekGures.UseVisualStyleBackColor = true;
-            this.btnBilekGures.Click += new System.EventHandler(this.btnBilekGures_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1405, 752);
+            this.ClientSize = new System.Drawing.Size(1362, 741);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.startPanel);
             this.Controls.Add(this.panel1);
@@ -816,6 +830,8 @@
         private System.Windows.Forms.CheckBox cbKrediKas;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button btnBilekGures;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Timer GuresTimer;
     }
 }
 
