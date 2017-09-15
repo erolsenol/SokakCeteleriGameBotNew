@@ -5,6 +5,44 @@ namespace SokakCeteleriGameBot
 {
     public static class ElementHelper
     {
+        public static HtmlElement FindSafeElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("img");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("src").Contains("http://v2i.streetmobster.com/tpl/img/connections.jpg?19"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindNoSafeElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("mbody_"))
+                {
+                   // if (e.FirstChild.InnerText== "Yeterince VİP gününüz yok.")
+                    {
+
+                    }
+                    return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindOpenSafeElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("pad_item safe_box_closed "))
+                { return e; }
+            }
+            return null;
+        }
+
         public static HtmlElement FindUserPropertiesElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("table");
@@ -298,7 +336,7 @@ namespace SokakCeteleriGameBot
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
             {
-                if (e.GetAttribute("className").Contains("user-box u-jl utt") && e.Children[1].FirstChild.InnerText == "Hapistesin")
+                if ((e.GetAttribute("className").Contains("user-box u-jl utt")|| (e.GetAttribute("className").Contains("user-box vip-jl utt")) && e.Children[1].FirstChild.InnerText == "Hapistesin"))
                 { return e.Children[1].FirstChild; }
             }
             return null;

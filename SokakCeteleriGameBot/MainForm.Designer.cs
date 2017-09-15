@@ -147,12 +147,13 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(401, 80);
+            this.checkBox1.Location = new System.Drawing.Point(444, 80);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(60, 17);
+            this.checkBox1.Size = new System.Drawing.Size(56, 17);
             this.checkBox1.TabIndex = 42;
-            this.checkBox1.Text = "Saygım";
+            this.checkBox1.Text = "Savaş";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // btnBilekGures
             // 
@@ -166,11 +167,11 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(913, 65);
+            this.button6.Location = new System.Drawing.Point(711, 96);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 40;
-            this.button6.Text = "button6";
+            this.button6.Text = "Kasa Aç";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
@@ -207,7 +208,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(711, 96);
+            this.button3.Location = new System.Drawing.Point(903, 96);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(85, 23);
             this.button3.TabIndex = 36;

@@ -14,11 +14,11 @@ namespace SokakCeteleriGameBot
         //  readonly WebBrowser _webBrowser;
         bool _isPageLoaded, _isLoggedIn, _enerjiDurum, _hapisKacKart = true, _hapisKacBaglanti = true, _rusvetNoPara = true,
             _gucKartKullan, _zekaKartKullan, _hastaneKartKullan = true, _hastaneParaKullan, _zehirKartKullan = true,
-            _canKartKullan = true, _enerjiKartKullan = true, _krediKas = false;
+            _canKartKullan = true, _enerjiKartKullan = true, _krediKas = false, savass;
 
         private GameOps _game = GameOps.Non;
         private Int64 _atak, _baglanti, _respectPoints;
-        private int _can, _enerji, _enerjiToplam, _zehirToplam, _cantoplam, _riskToplam, _risk, _zehir, _seviye, _para, _minSeviye, _taneZekaAl,
+        private int _can, _enerji, _enerjiToplam, _zehirToplam, _cantoplam, _riskToplam, _risk, _zehir, _seviye, _para, _minSeviye = 5, _taneZekaAl,
             _taneGucAl, _riskHesapla;
         private int _zeka, _guc, _cazibe;
         private int _battlePoints;
@@ -37,7 +37,9 @@ namespace SokakCeteleriGameBot
 
         private void button3_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("http://sokakceteleri.com/");
+            var kasaAc = ElementHelper.FindOpenSafeElement(webBrowser1.Document);
+            kasaAc.InvokeMember("click"); return;
+            //  webBrowser1.Navigate("http://sokakceteleri.com/");
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -62,8 +64,8 @@ namespace SokakCeteleriGameBot
 
         private void button6_Click(object sender, EventArgs e)
         {
-
-            var kacakci = MenuElement.LeftMenuElement(webBrowser1.Document);
+            KasaAc(webBrowser1.Document);
+            _game = GameOps.KasaAc;
         }
 
         private void btnGo_Click(object sender, EventArgs e)
@@ -128,6 +130,14 @@ namespace SokakCeteleriGameBot
             { _zehirKartKullan = true; }
             else
             { _zehirKartKullan = false; }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            { savass = true; }
+            else
+            { savass = false; }
         }
 
         private void cbCanKart_CheckedChanged(object sender, EventArgs e)
@@ -316,7 +326,7 @@ namespace SokakCeteleriGameBot
             var document = webBrowser1.Document;
             if (document == null) return;
 
-          //  LoginToGame(document);
+            LoginToGame(document);
          // if (_isPageLoaded) { return; } 
 
             BilgileriGetir(document);
@@ -342,6 +352,9 @@ namespace SokakCeteleriGameBot
                     break;
                 case GameOps.BilekGuresi:
                     BilekGuresi(document);
+                    break;
+                case GameOps.KasaAc:
+                    KasaAc(document);
                     break;
                 default:
                     break;
@@ -634,23 +647,25 @@ namespace SokakCeteleriGameBot
            else if (_guc > 0)
             {
                 var enerjilow = EnerjiElement.LowEnerjiTrainingElement(document);
-                var ant = ElementHelper.FindTrainingContentElement(document);
-                var completed = ElementHelper.FindTrainingCompletedElement(document);
                 if (enerjilow != null)
                 {
 
                     elEnerji.InvokeMember("click"); _enerjiDurum = false; return;
                 }
-                
-                else if (ant != null)
-                {
-                    var gucTik = ElementHelper.GucTikElement(ant);
-                    gucTik.InvokeMember("click"); return;
-                }
-                else
+                var ant = ElementHelper.FindTrainingContentElement(document);
+                if (ant == null)
                 {
                     elGuc.InvokeMember("click"); return;
                 }
+                var gucTik = ElementHelper.GucTikElement(ant);
+                if (gucTik != null)
+                {
+                    gucTik.InvokeMember("click"); return;
+                }
+                
+                
+                   
+                
             }
             if (_zekaKartKullan)
             {
@@ -678,7 +693,7 @@ namespace SokakCeteleriGameBot
                     }
                     else
                     {
-                        _zekaKartKullan = false; webBrowser1.Refresh(); cbZekaKart.Visible = false; return;
+                        _zekaKartKullan = false; webBrowser1.Refresh(); cbZekaKart.Checked = false; return;
                     }
                 }
 
@@ -711,7 +726,7 @@ namespace SokakCeteleriGameBot
                     }
                     else
                     {
-                        _gucKartKullan = false; webBrowser1.Refresh(); cbGuckart.Visible = false; return;
+                        _gucKartKullan = false; webBrowser1.Refresh(); cbGuckart.Checked = false; return;
                     }
                 }
 
@@ -911,7 +926,7 @@ namespace SokakCeteleriGameBot
                     elEnerji.InvokeMember("click"); ; return;
                 }
             }
-            else if (_battlePoints > 0)
+            else if (_battlePoints > 0 || savass)
             {
                 var dovusYap = ElementHelper.FindFightCompletedElement(document);
                 if (dovusYap != null)
@@ -2227,6 +2242,35 @@ namespace SokakCeteleriGameBot
 
             var sokak1 = MenuElement.LeftMenuElement(document);
             sokak1.Children[1].FirstChild.InvokeMember("click"); return;
+        }
+
+        private void KasaAc(HtmlDocument document)
+        {
+            var kasaAcma = ElementHelper.FindNoSafeElement(webBrowser1.Document);
+            if (kasaAcma != null)
+            {
+                _game = GameOps.Non;return;
+            }
+            var kasaAc = ElementHelper.FindOpenSafeElement(webBrowser1.Document);
+           
+            if (kasaAc != null)
+            {
+                kasaAc.InvokeMember("click"); 
+            }
+            var kasaBul = ElementHelper.FindSafeElement(webBrowser1.Document);
+            if (kasaBul != null)
+            {
+                kasaBul.InvokeMember("click"); return;
+            }
+            
+            var ustMenu = MenuElement.TopMenuBankElement(webBrowser1.Document);
+            if (ustMenu != null)
+            {
+                ustMenu.InvokeMember("click");return;
+            }
+
+            var banka = MenuElement.LeftMenuElement(webBrowser1.Document);
+            banka.Children[13].FirstChild.InvokeMember("click");return;
         }
 
         private IScheduler Baslat()

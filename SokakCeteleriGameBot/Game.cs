@@ -8,6 +8,7 @@
         Gorev = 3,
         Harac = 4,
         Kasil = 5,
-        BilekGuresi = 6
+        BilekGuresi = 6,
+        KasaAc = 7
     }
 }
