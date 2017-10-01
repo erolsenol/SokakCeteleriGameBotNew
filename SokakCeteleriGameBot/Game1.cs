@@ -1,6 +1,6 @@
 ﻿namespace SokakCeteleriGameBot
 {
-    public enum GameOps
+    public enum GameOps1
     {
         Non = 0,
         Antrenman = 1,
@@ -10,7 +10,6 @@
         Kasil = 5,
         BilekGuresi = 6,
         KasaAc = 7,
-        GorevKatil = 8,
-        MesajGonder = 9
+        GorevKatil = 8
     }
 }

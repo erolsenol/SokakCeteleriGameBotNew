@@ -30,6 +30,32 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement Ajan(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("spot agent"))
+                {
+                    { return e; }
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement Enerji(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("spot cofemachine"))
+                {
+                    { return e; }
+                }
+            }
+            return null;
+        }
+
         public static HtmlElement Atm(HtmlElement document)
         {
             var elements = document.GetElementsByTagName("a");

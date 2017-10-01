@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ElementHelper.cs" />
+    <Compile Include="Game1.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="JobTest1.cs" />
     <Compile Include="MainForm.cs">

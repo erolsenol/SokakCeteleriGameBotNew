@@ -30,15 +30,17 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.cbEnerjiSokak = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.tbPassword = new System.Windows.Forms.TextBox();
+            this.tbName = new System.Windows.Forms.TextBox();
+            this.lbCredi = new System.Windows.Forms.Label();
+            this.cbHapisGir = new System.Windows.Forms.CheckBox();
             this.btnBilekGures = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.cbKrediKas = new System.Windows.Forms.CheckBox();
-            this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.btnNewIp = new System.Windows.Forms.Button();
             this.btnGo = new System.Windows.Forms.Button();
             this.cbRiskKart = new System.Windows.Forms.CheckBox();
             this.cbEnerjiKart = new System.Windows.Forms.CheckBox();
@@ -88,6 +90,11 @@
             this.startPanel = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.GuresTimer = new System.Windows.Forms.Timer(this.components);
+            this.tbSubject = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tbMessage = new System.Windows.Forms.RichTextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbUserMsgSend = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.startPanel.SuspendLayout();
@@ -95,15 +102,21 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.checkBox1);
+            this.panel1.Controls.Add(this.cbUserMsgSend);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.tbMessage);
+            this.panel1.Controls.Add(this.tbSubject);
+            this.panel1.Controls.Add(this.button5);
+            this.panel1.Controls.Add(this.cbEnerjiSokak);
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.tbPassword);
+            this.panel1.Controls.Add(this.tbName);
+            this.panel1.Controls.Add(this.lbCredi);
+            this.panel1.Controls.Add(this.cbHapisGir);
             this.panel1.Controls.Add(this.btnBilekGures);
             this.panel1.Controls.Add(this.button6);
-            this.panel1.Controls.Add(this.cbKrediKas);
-            this.panel1.Controls.Add(this.button5);
             this.panel1.Controls.Add(this.button4);
             this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.btnNewIp);
             this.panel1.Controls.Add(this.btnGo);
             this.panel1.Controls.Add(this.cbRiskKart);
             this.panel1.Controls.Add(this.cbEnerjiKart);
@@ -144,16 +157,71 @@
             this.panel1.Size = new System.Drawing.Size(1362, 122);
             this.panel1.TabIndex = 0;
             // 
-            // checkBox1
+            // button5
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(444, 80);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(56, 17);
-            this.checkBox1.TabIndex = 42;
-            this.checkBox1.Text = "Savaş";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.button5.Location = new System.Drawing.Point(940, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(89, 29);
+            this.button5.TabIndex = 49;
+            this.button5.Text = "Message Send";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_2);
+            // 
+            // cbEnerjiSokak
+            // 
+            this.cbEnerjiSokak.AutoSize = true;
+            this.cbEnerjiSokak.Location = new System.Drawing.Point(802, 103);
+            this.cbEnerjiSokak.Name = "cbEnerjiSokak";
+            this.cbEnerjiSokak.Size = new System.Drawing.Size(86, 17);
+            this.cbEnerjiSokak.TabIndex = 48;
+            this.cbEnerjiSokak.Text = "Enerji Sokak";
+            this.cbEnerjiSokak.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(818, 45);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(100, 23);
+            this.button2.TabIndex = 47;
+            this.button2.Text = "Login";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // tbPassword
+            // 
+            this.tbPassword.Location = new System.Drawing.Point(818, 23);
+            this.tbPassword.Name = "tbPassword";
+            this.tbPassword.Size = new System.Drawing.Size(100, 20);
+            this.tbPassword.TabIndex = 46;
+            // 
+            // tbName
+            // 
+            this.tbName.Location = new System.Drawing.Point(818, 3);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(100, 20);
+            this.tbName.TabIndex = 45;
+            // 
+            // lbCredi
+            // 
+            this.lbCredi.AutoSize = true;
+            this.lbCredi.ForeColor = System.Drawing.Color.Red;
+            this.lbCredi.Location = new System.Drawing.Point(191, 99);
+            this.lbCredi.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbCredi.Name = "lbCredi";
+            this.lbCredi.Size = new System.Drawing.Size(40, 13);
+            this.lbCredi.TabIndex = 44;
+            this.lbCredi.Text = "Kredi : ";
+            // 
+            // cbHapisGir
+            // 
+            this.cbHapisGir.AutoSize = true;
+            this.cbHapisGir.Location = new System.Drawing.Point(368, 80);
+            this.cbHapisGir.Name = "cbHapisGir";
+            this.cbHapisGir.Size = new System.Drawing.Size(105, 17);
+            this.cbHapisGir.TabIndex = 42;
+            this.cbHapisGir.Text = "Hapise Gir Modu";
+            this.cbHapisGir.UseVisualStyleBackColor = true;
+            this.cbHapisGir.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // btnBilekGures
             // 
@@ -169,36 +237,15 @@
             // 
             this.button6.Location = new System.Drawing.Point(711, 96);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.Size = new System.Drawing.Size(85, 23);
             this.button6.TabIndex = 40;
             this.button6.Text = "Kasa Aç";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // cbKrediKas
-            // 
-            this.cbKrediKas.AutoSize = true;
-            this.cbKrediKas.Location = new System.Drawing.Point(711, 80);
-            this.cbKrediKas.Name = "cbKrediKas";
-            this.cbKrediKas.Size = new System.Drawing.Size(115, 17);
-            this.cbKrediKas.TabIndex = 39;
-            this.cbKrediKas.Text = "5. Seviyede Savaş";
-            this.cbKrediKas.UseVisualStyleBackColor = true;
-            this.cbKrediKas.CheckedChanged += new System.EventHandler(this.cbKrediKas_CheckedChanged);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(1004, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(85, 23);
-            this.button5.TabIndex = 38;
-            this.button5.Text = "ip 0 la";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(1115, 99);
+            this.button4.Location = new System.Drawing.Point(1146, 100);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(85, 23);
             this.button4.TabIndex = 37;
@@ -208,33 +255,13 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(903, 96);
+            this.button3.Location = new System.Drawing.Point(711, 72);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(85, 23);
             this.button3.TabIndex = 36;
-            this.button3.Text = "Oyuna Dön";
+            this.button3.Text = "Çete Görev";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(913, 28);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(85, 23);
-            this.button2.TabIndex = 35;
-            this.button2.Text = "İp Adrese Bak";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // btnNewIp
-            // 
-            this.btnNewIp.Location = new System.Drawing.Point(913, 3);
-            this.btnNewIp.Name = "btnNewIp";
-            this.btnNewIp.Size = new System.Drawing.Size(85, 23);
-            this.btnNewIp.TabIndex = 34;
-            this.btnNewIp.Text = "New İp Adresi";
-            this.btnNewIp.UseVisualStyleBackColor = true;
-            this.btnNewIp.Click += new System.EventHandler(this.btnNewIp_Click);
             // 
             // btnGo
             // 
@@ -748,6 +775,44 @@
             this.webBrowser1.Size = new System.Drawing.Size(1362, 619);
             this.webBrowser1.TabIndex = 5;
             // 
+            // tbSubject
+            // 
+            this.tbSubject.Location = new System.Drawing.Point(1080, 3);
+            this.tbSubject.Name = "tbSubject";
+            this.tbSubject.Size = new System.Drawing.Size(79, 20);
+            this.tbSubject.TabIndex = 50;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // tbMessage
+            // 
+            this.tbMessage.Location = new System.Drawing.Point(1035, 26);
+            this.tbMessage.Name = "tbMessage";
+            this.tbMessage.Size = new System.Drawing.Size(124, 96);
+            this.tbMessage.TabIndex = 51;
+            this.tbMessage.Text = "";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1032, 7);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(43, 13);
+            this.label3.TabIndex = 52;
+            this.label3.Text = "Subject";
+            // 
+            // cbUserMsgSend
+            // 
+            this.cbUserMsgSend.FormattingEnabled = true;
+            this.cbUserMsgSend.Location = new System.Drawing.Point(940, 32);
+            this.cbUserMsgSend.Name = "cbUserMsgSend";
+            this.cbUserMsgSend.Size = new System.Drawing.Size(89, 21);
+            this.cbUserMsgSend.TabIndex = 53;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -823,16 +888,23 @@
         private System.Windows.Forms.CheckBox cbEnerjiKart;
         private System.Windows.Forms.CheckBox cbRiskKart;
         private System.Windows.Forms.Button btnGo;
-        private System.Windows.Forms.Button btnNewIp;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.CheckBox cbKrediKas;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button btnBilekGures;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cbHapisGir;
         private System.Windows.Forms.Timer GuresTimer;
+        private System.Windows.Forms.Label lbCredi;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox tbPassword;
+        private System.Windows.Forms.TextBox tbName;
+        private System.Windows.Forms.CheckBox cbEnerjiSokak;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RichTextBox tbMessage;
+        private System.Windows.Forms.TextBox tbSubject;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ComboBox cbUserMsgSend;
     }
 }
 

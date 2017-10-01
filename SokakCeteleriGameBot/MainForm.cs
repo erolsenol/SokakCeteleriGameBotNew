@@ -12,15 +12,19 @@ namespace SokakCeteleriGameBot
     {
         System.Threading.Timer _timer;
         //  readonly WebBrowser _webBrowser;
+        string userName, Password;
         bool _isPageLoaded, _isLoggedIn, _enerjiDurum, _hapisKacKart = true, _hapisKacBaglanti = true, _rusvetNoPara = true,
             _gucKartKullan, _zekaKartKullan, _hastaneKartKullan = true, _hastaneParaKullan, _zehirKartKullan = true,
-            _canKartKullan = true, _enerjiKartKullan = true, _krediKas = false, savass;
+            _canKartKullan = true, _enerjiKartKullan = true, _krediKas = false, savass, otoLogin, ceteVarmi = true;
 
+        string[] _userNames;
+        //   WebBrowser webBrowser2 = new WebBrowser();
         private GameOps _game = GameOps.Non;
+        private GameOps1 _game1 = GameOps1.Non;
         private Int64 _atak, _baglanti, _respectPoints;
         private int _can, _enerji, _enerjiToplam, _zehirToplam, _cantoplam, _riskToplam, _risk, _zehir, _seviye, _para, _minSeviye = 5, _taneZekaAl,
             _taneGucAl, _riskHesapla;
-        private int _zeka, _guc, _cazibe;
+        private int _zeka, _guc, _cazibe, _msgİnt, _userİnt;
         private int _battlePoints;
         
         private HtmlElement elEnerji, elGuc, elZeka;
@@ -30,16 +34,9 @@ namespace SokakCeteleriGameBot
             SetProxy("82.165.73.186.80");
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            webBrowser1.Navigate("https://www.chip.com.tr/ip-adresim-nedir");
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
-            var kasaAc = ElementHelper.FindOpenSafeElement(webBrowser1.Document);
-            kasaAc.InvokeMember("click"); return;
-            //  webBrowser1.Navigate("http://sokakceteleri.com/");
+            
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -54,14 +51,6 @@ namespace SokakCeteleriGameBot
             webBrowser1.Navigate("http://www.sokakceteleri.com/?affiliate_guid=4129260");
         }
 
-        private void cbKrediKas_CheckedChanged(object sender, EventArgs e)
-        {
-            if (cbKrediKas.Checked)
-            { _krediKas = true; }
-            else
-            { _krediKas = false; }
-        }
-
         private void button6_Click(object sender, EventArgs e)
         {
             KasaAc(webBrowser1.Document);
@@ -70,6 +59,7 @@ namespace SokakCeteleriGameBot
 
         private void btnGo_Click(object sender, EventArgs e)
         {
+           // webBrowser2.Navigate("http://sokakceteleri.com/");
             _game = GameOps.Kasil;
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
@@ -134,11 +124,24 @@ namespace SokakCeteleriGameBot
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (cbHapisGir.Checked)
             { savass = true; }
             else
             { savass = false; }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            userName = tbName.Text;
+            Password = tbPassword.Text;
+            LoginToGame(webBrowser1.Document);
+            otoLogin = true;
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            webBrowser1.Navigate("http://bgmafia.com/");
+        }    
 
         private void cbCanKart_CheckedChanged(object sender, EventArgs e)
         {
@@ -153,6 +156,14 @@ namespace SokakCeteleriGameBot
             _game = GameOps.Non;
             cbGucAl.Enabled = false;
             cbZekaAl.Enabled = false;
+        }
+        int i = 0;
+        private void button5_Click_2(object sender, EventArgs e)
+        {
+            _userNames = new string[350];
+            cbUserMsgSend.Items.Clear();
+            UserMessage(webBrowser1.Document);
+            _game = GameOps.MesajGonder;
         }
 
         private void cbZekaKart_CheckedChanged(object sender, EventArgs e)
@@ -285,48 +296,95 @@ namespace SokakCeteleriGameBot
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            cbKrediKas.Enabled = false;
             webBrowser1.Navigate("http://sokakceteleri.com/");
             webBrowser1.DocumentCompleted += WebBrowser1_DocumentCompleted;
+
+         //   webBrowser2.DocumentCompleted += WebBrowser2_DocumentCompleted;
         }
 
-    /*    private void _webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+    /*    private void WebBrowser2_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            var document = _webBrowser.Document;
+            var document = webBrowser2.Document;
             if (document == null) return;
 
             LoginToGame(document);
-            //  if (_isPageLoaded) { return; } 
+            // if (_isPageLoaded) { return; } 
 
             BilgileriGetir(document);
             GetTraniningPoints(document);
 
             startPanel.Visible = !_isPageLoaded;
-            switch (_game)
+            switch (_game1)
             {
-                case GameOps.Antrenman:
+                case GameOps1.Antrenman:
                     Antrenman(document);
                     break;
-                case GameOps.Savas:
+                case GameOps1.Savas:
                     Savas(document);
                     break;
-                case GameOps.Gorev:
-                    //Gorev
+                case GameOps1.Gorev:
+                    GorevYap(document);
                     break;
-                case GameOps.Harac:
-                    //Harac
+                case GameOps1.Harac:
+                    HaracTopla(document);
+                    break;
+                case GameOps1.Kasil:
+                    Kasil(document);
+                    break;
+                case GameOps1.BilekGuresi:
+                    BilekGuresi(document);
+                    break;
+                case GameOps1.KasaAc:
+                    KasaAc(document);
+                    break;
+                case GameOps1.GorevKatil:
+                    CeteGorev(document);
                     break;
                 default:
                     break;
             }
-        }
-        */
+        }/*
+
+        /*    private void _webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+            {
+                var document = _webBrowser.Document;
+                if (document == null) return;
+
+                LoginToGame(document);
+                //  if (_isPageLoaded) { return; } 
+
+                BilgileriGetir(document);
+                GetTraniningPoints(document);
+
+                startPanel.Visible = !_isPageLoaded;
+                switch (_game)
+                {
+                    case GameOps.Antrenman:
+                        Antrenman(document);
+                        break;
+                    case GameOps.Savas:
+                        Savas(document);
+                        break;
+                    case GameOps.Gorev:
+                        //Gorev
+                        break;
+                    case GameOps.Harac:
+                        //Harac
+                        break;
+                    default:
+                        break;
+                }
+            }
+            */
+
         private void WebBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             var document = webBrowser1.Document;
             if (document == null) return;
 
-            LoginToGame(document);
+        //    if (otoLogin)
+            {LoginToGame(document);}
+            
          // if (_isPageLoaded) { return; } 
 
             BilgileriGetir(document);
@@ -356,6 +414,12 @@ namespace SokakCeteleriGameBot
                 case GameOps.KasaAc:
                     KasaAc(document);
                     break;
+                case GameOps.GorevKatil:
+                    CeteGorev(document);
+                    break;
+                case GameOps.MesajGonder:
+                    UserMessage(document);
+                    break;
                 default:
                     break;
             }
@@ -378,8 +442,8 @@ namespace SokakCeteleriGameBot
 
         public void timer_timerCallback(object state)
         {
-            webBrowser1.Refresh();
-            _game = GameOps.BilekGuresi;
+            webBrowser1.Navigate("http://sokakceteleri.com/");
+            //_game = GameOps.BilekGuresi;
             _timer.Dispose();   
         }
 
@@ -477,6 +541,11 @@ namespace SokakCeteleriGameBot
        
         private void GetTraniningPoints(HtmlDocument document)
         {
+            var credit = ElementHelper.FindCreditElement(document);
+            if (credit != null)
+            {
+               lbCredi.Text="Kredi : "+ credit.FirstChild.InnerText;
+            }
             var trainingInfosElement = ElementHelper.FindTrainingElement(document);
             if (trainingInfosElement != null)
             {
@@ -537,7 +606,7 @@ namespace SokakCeteleriGameBot
                     }
                     else
                     {
-                        _atak = Convert.ToInt16(atakk);
+                        _atak = Convert.ToInt32(atakk);
                         lbAtak.Text = @"Atak : " + _atak.ToString();
                     }
                 }
@@ -572,10 +641,8 @@ namespace SokakCeteleriGameBot
         {
             if (document == null) return;
             if (_enerji < 40) { _enerjiDurum = false; }
-            else if (_enerji == _enerjiToplam)
-            {
-                _enerjiDurum = true;
-            }
+            if (_enerji == _enerjiToplam)
+            { _enerjiDurum = true; }
             if (!_enerjiDurum)
             {
                 if (_enerjiKartKullan)
@@ -594,26 +661,72 @@ namespace SokakCeteleriGameBot
                         }
                         else
                         {
-                            cbEnerjiKart.Checked = false; elEnerji.InvokeMember("click"); return;
+                            cbEnerjiKart.Checked = false; _enerjiKartKullan = false; elEnerji.InvokeMember("click"); return;
                         }
-
                     }
                     var envanter = MenuElement.RightMenuElement(document);
                     envanter.FirstChild.InvokeMember("click"); return;
                 }
-                var findDrink = EnerjiElement.FindDrinkElement(document);
-
-                if (_enerji == _enerjiToplam)
+                if (cbEnerjiSokak.Checked)
                 {
-                    _enerjiDurum = true; webBrowser1.Refresh(); return;
+                    var street = document.GetElementById("map");
+                    if (street != null)
+                    {
+                        var enerjiic = Saldir.Enerji(street);
+                        enerjiic.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[2].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var home = MenuElement.LeftMenuElement(document);
+                    home.Children[1].FirstChild.InvokeMember("click"); return;
                 }
-                else if (findDrink != null)
+                var findDrink = EnerjiElement.FindDrinkElement(document);
+                if (findDrink != null)
                 {
-                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
-                    foreach (HtmlElement a in bul)
+                    HtmlElementCollection bulViski = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulViski)
                     {
                         string nameStr = a.GetAttribute("src");
                         if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulVodka = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulVodka)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/504.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulBira = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulBira)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/503.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulKahve = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulKahve)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/502.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulSoda = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulSoda)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/501.jpg")
                         {
                             a.InvokeMember("click"); return;
                         }
@@ -760,29 +873,30 @@ namespace SokakCeteleriGameBot
                 var thisPrison = ElementHelper.FindThisIsPrisonElement(document);
                 if (thisPrison != null)
                 {
-                    if (_hapisKacKart && Convert.ToInt16(thisPrison.FirstChild.Children[1].Children[0].Children[2].Children[0].Children[0].
-                    Children[0].Children[0].Children[1].InnerText) > 0)
+                    var hapiskart = ElementHelper.FindHapisKart(thisPrison);
+                    if (_hapisKacKart && Convert.ToInt16(hapiskart.FirstChild.Children[1].InnerText) > 0)
                     {
-                        thisPrison.FirstChild.Children[1].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        hapiskart.InvokeMember("click"); return;
                     }
-                    else if (_hapisKacBaglanti && _baglanti >= 78)
+                    if (_hapisKacBaglanti)
                     {
-                        thisPrison.FirstChild.Children[1].Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                        var prisonEscape = ElementHelper.FindHapisBaglantii(thisPrison);
+                        prisonEscape.InvokeMember("click");
                         var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
                         if (escapeConnect != null)
                         {
-                            escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
-                                Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                            var baglantiyeter = ElementHelper.FindEscapemoney(escapeConnect);
+
+                            if (Convert.ToInt32(baglantiyeter.InnerText) < _baglanti)
+                            {
+                                var connectok = ElementHelper.FindConnectEscape(escapeConnect); connectok.InvokeMember("click"); ; return;
+                            }
                         }
                     }
-                    else
+                    var topuk = ElementHelper.FindPrisonTopuk(thisPrison);
+                    if (topuk != null)
                     {
-                        if (!thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
-                            FirstChild.GetAttribute("className").Contains("pad_item jail_icons jail_riot_1 json"))
-                        {
-                            thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
-                                FirstChild.InvokeMember("click"); return;
-                        }
+                        topuk.InvokeMember("click"); return;
                     }
                 }
                 prison.InvokeMember("click"); return;
@@ -815,25 +929,28 @@ namespace SokakCeteleriGameBot
             var hospital = ElementHelper.FindHospitalElement(document);
             if (hospital != null)
             {
-                if (hospital.FirstChild.Children[2].CanHaveChildren)
+                var hos = ElementHelper.FindHosElement(document);
+                if (hos != null)
                 {
-                    if (0 < Convert.ToInt16(hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.
-                                        FirstChild.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
+                    var hoskart = ElementHelper.FindHosKartElement(hos);
+                    if (0 < Convert.ToInt16(hoskart.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hoskart.InvokeMember("click"); return;
                     }
+                    else
+                    { cbHastaneKart.Checked = false; }
                     var paraYok = EnerjiElement.LowEnerjiTrainingElement(document);
                     if (paraYok != null && paraYok.Children[2].GetAttribute("className").Contains("getin b"))
                     {
                         _hastaneKartKullan = false; cbHastanePara.Checked = false;
                     }
-                    if (_hastaneParaKullan)
+                    var hemsir = ElementHelper.FindHosHemsireElement(hos);
+                    if (_hastaneParaKullan && hemsir != null)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[1].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hemsir.InvokeMember("click"); return;
                     }
                 }
-                var sokak = MenuElement.LeftMenuElement(document);
-                sokak.Children[1].FirstChild.InvokeMember("click");return;
+                hospital.InvokeMember("click"); return;
             }
             if (_zehir + 20 >= _zehirToplam && _zehirKartKullan)
             {
@@ -881,9 +998,9 @@ namespace SokakCeteleriGameBot
                 var envanter = MenuElement.RightMenuElement(document);
                 envanter.FirstChild.InvokeMember("click");return;
             }
-            if (_enerji < 60) { _enerjiDurum = false; }
+            if (_enerji < 70) { _enerjiDurum = false; }
             if (_enerji == _enerjiToplam)
-             { _enerjiDurum = true; }
+            { _enerjiDurum = true; }
             if (!_enerjiDurum)
             {
                 if (_enerjiKartKullan)
@@ -902,20 +1019,72 @@ namespace SokakCeteleriGameBot
                         }
                         else
                         {
-                            cbEnerjiKart.Checked = false;
+                            cbEnerjiKart.Checked = false; _enerjiKartKullan = false; elEnerji.InvokeMember("click"); return;
                         }
                     }
                     var envanter = MenuElement.RightMenuElement(document);
                     envanter.FirstChild.InvokeMember("click"); return;
                 }
+                if (cbEnerjiSokak.Checked)
+                {
+                    var street = document.GetElementById("map");
+                    if (street != null)
+                    {
+                        var enerjiic = Saldir.Enerji(street);
+                        enerjiic.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[2].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var home = MenuElement.LeftMenuElement(document);
+                    home.Children[1].FirstChild.InvokeMember("click"); return;
+                }
                 var findDrink = EnerjiElement.FindDrinkElement(document);
                 if (findDrink != null)
                 {
-                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
-                    foreach (HtmlElement a in bul)
+                    HtmlElementCollection bulViski = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulViski)
                     {
                         string nameStr = a.GetAttribute("src");
                         if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulVodka = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulVodka)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/504.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulBira = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulBira)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/503.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulKahve = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulKahve)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/502.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulSoda = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulSoda)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/501.jpg")
                         {
                             a.InvokeMember("click"); return;
                         }
@@ -926,7 +1095,55 @@ namespace SokakCeteleriGameBot
                     elEnerji.InvokeMember("click"); ; return;
                 }
             }
-            else if (_battlePoints > 0 || savass)
+            if (ceteVarmi)
+            {var gangCrime = ElementHelper.FindMessageElement(document);
+            if (gangCrime != null)
+            {
+                    var gangWho = ElementHelper.FindNoGangElement(document);
+                    if (gangWho != null&&gangWho.FirstChild.InnerText== "Çete » Çete kur")
+                    {
+                        var sokak = MenuElement.LeftMenuElement(document);
+                        if (sokak != null)
+                        {
+                            sokak.Children[1].FirstChild.InvokeMember("click"); ceteVarmi = false; return;
+                        }
+                    }
+                var gangGo = ElementHelper.FindGangGoElement(document);
+                if (gangGo != null&&gangGo.FirstChild.InnerText== "Çete » Görevler")
+                {
+                    var crimeConnect = document.GetElementById("c[join]");
+                    if (crimeConnect != null)
+                    {
+                        crimeConnect.InvokeMember("click"); return;
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                var gangBody = ElementHelper.FindGangBodyElement(document);
+                if (gangBody != null)
+                {
+                    var gangDuty = MenuElement.TopMenuGangCrimeElement(document);
+                    if (gangDuty != null)
+                    {
+                        gangDuty.InvokeMember("click");return;
+                    }
+                }
+                if (gangCrime.Children[1].GetAttribute("title").Contains("0 dakika önce"))
+                {
+                    var elements = gangCrime.Children[1].GetElementsByTagName("a");
+                    foreach (HtmlElement a in elements)
+                    {
+                        if (a.InnerText == "Çete görevi" && a.InnerText == "Çete dövüşü")
+                        {
+                            a.InvokeMember("click");return;
+                        }
+                    }
+                }
+            }}
+            if (_battlePoints > 0 )
             {
                 var dovusYap = ElementHelper.FindFightCompletedElement(document);
                 if (dovusYap != null)
@@ -960,7 +1177,7 @@ namespace SokakCeteleriGameBot
         private void HaracTopla(HtmlDocument document)
         {
             if (document == null) return;
-            if (_enerji < 10) { _enerjiDurum = false; }
+            if (_enerji < 60) { _enerjiDurum = false; }
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
             if (!_enerjiDurum)
@@ -981,20 +1198,72 @@ namespace SokakCeteleriGameBot
                         }
                         else
                         {
-                            cbEnerjiKart.Checked = false;
+                            cbEnerjiKart.Checked = false; _enerjiKartKullan = false; elEnerji.InvokeMember("click"); return;
                         }
                     }
                     var envanter = MenuElement.RightMenuElement(document);
                     envanter.FirstChild.InvokeMember("click"); return;
                 }
+                if (cbEnerjiSokak.Checked)
+                {
+                    var street = document.GetElementById("map");
+                    if (street != null)
+                    {
+                        var enerjiic = Saldir.Enerji(street);
+                        enerjiic.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[2].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var home = MenuElement.LeftMenuElement(document);
+                    home.Children[1].FirstChild.InvokeMember("click"); return;
+                }
                 var findDrink = EnerjiElement.FindDrinkElement(document);
                 if (findDrink != null)
                 {
-                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
-                    foreach (HtmlElement a in bul)
+                    HtmlElementCollection bulViski = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulViski)
                     {
                         string nameStr = a.GetAttribute("src");
                         if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulVodka = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulVodka)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/504.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulBira = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulBira)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/503.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulKahve = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulKahve)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/502.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulSoda = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulSoda)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/501.jpg")
                         {
                             a.InvokeMember("click"); return;
                         }
@@ -1026,29 +1295,30 @@ namespace SokakCeteleriGameBot
                 var thisPrison = ElementHelper.FindThisIsPrisonElement(document);
                 if (thisPrison != null)
                 {
-                    if (_hapisKacKart && Convert.ToInt16(thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].
-                    Children[0].Children[0].Children[1].InnerText) > 0)
+                    var hapiskart = ElementHelper.FindHapisKart(thisPrison);
+                    if (_hapisKacKart && Convert.ToInt16(hapiskart.FirstChild.Children[1].InnerText) > 0)
                     {
-                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        hapiskart.InvokeMember("click"); return;
                     }
-                    else if (_hapisKacBaglanti && _baglanti >= 78)
+                    if (_hapisKacBaglanti)
                     {
-                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                        var prisonEscape = ElementHelper.FindHapisBaglantii(thisPrison);
+                        prisonEscape.InvokeMember("click");
                         var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
                         if (escapeConnect != null)
                         {
-                            escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
-                                Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                            var baglantiyeter = ElementHelper.FindEscapemoney(escapeConnect);
+
+                            if (Convert.ToInt32(baglantiyeter.InnerText) < _baglanti)
+                            {
+                                var connectok = ElementHelper.FindConnectEscape(escapeConnect); connectok.InvokeMember("click"); ; return;
+                            }
                         }
                     }
-                    else
+                    var topuk = ElementHelper.FindPrisonTopuk(thisPrison);
+                    if (topuk != null)
                     {
-                        if (!thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
-                            FirstChild.GetAttribute("className").Contains("pad_item jail_icons jail_riot_1 json"))
-                        {
-                            thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
-                                FirstChild.InvokeMember("click"); return;
-                        }
+                        topuk.InvokeMember("click"); return;
                     }
                 }
                 prison.InvokeMember("click"); return;
@@ -1081,25 +1351,28 @@ namespace SokakCeteleriGameBot
             var hospital = ElementHelper.FindHospitalElement(document);
             if (hospital != null)
             {
-                if (hospital.FirstChild.Children[2].CanHaveChildren)
+                var hos = ElementHelper.FindHosElement(document);
+                if (hos != null)
                 {
-                    if (0 < Convert.ToInt16(hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.
-                                        FirstChild.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
+                    var hoskart = ElementHelper.FindHosKartElement(hos);
+                    if (0 < Convert.ToInt16(hoskart.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hoskart.InvokeMember("click"); return;
                     }
+                    else
+                    { cbHastaneKart.Checked = false; }
                     var paraYok = EnerjiElement.LowEnerjiTrainingElement(document);
                     if (paraYok != null && paraYok.Children[2].GetAttribute("className").Contains("getin b"))
                     {
                         _hastaneKartKullan = false; cbHastanePara.Checked = false;
                     }
-                    if (_hastaneParaKullan)
+                    var hemsir = ElementHelper.FindHosHemsireElement(hos);
+                    if (_hastaneParaKullan && hemsir != null)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[1].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hemsir.InvokeMember("click"); return;
                     }
                 }
-                var sokak = MenuElement.LeftMenuElement(document);
-                sokak.Children[1].FirstChild.InvokeMember("click"); return;
+                hospital.InvokeMember("click"); return;
             }
             if (_zehir + 20 >= _zehirToplam && _zehirKartKullan)
             {
@@ -1147,7 +1420,7 @@ namespace SokakCeteleriGameBot
                 var envanter = MenuElement.RightMenuElement(document);
                 envanter.FirstChild.InvokeMember("click"); return;
             }
-            if (_enerji < 10) { _enerjiDurum = false; }
+            if (_enerji < 20) { _enerjiDurum = false; }
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
             if (!_enerjiDurum)
@@ -1168,20 +1441,72 @@ namespace SokakCeteleriGameBot
                         }
                         else
                         {
-                            cbEnerjiKart.Checked = false;
+                            cbEnerjiKart.Checked = false; _enerjiKartKullan = false; elEnerji.InvokeMember("click"); return;
                         }
                     }
                     var envanter = MenuElement.RightMenuElement(document);
                     envanter.FirstChild.InvokeMember("click"); return;
                 }
+                if (cbEnerjiSokak.Checked)
+                {
+                    var street = document.GetElementById("map");
+                    if (street != null)
+                    {
+                        var enerjiic = Saldir.Enerji(street);
+                        enerjiic.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[2].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var home = MenuElement.LeftMenuElement(document);
+                    home.Children[1].FirstChild.InvokeMember("click"); return;
+                }
                 var findDrink = EnerjiElement.FindDrinkElement(document);
                 if (findDrink != null)
                 {
-                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
-                    foreach (HtmlElement a in bul)
+                    HtmlElementCollection bulViski = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulViski)
                     {
                         string nameStr = a.GetAttribute("src");
                         if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulVodka = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulVodka)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/504.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulBira = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulBira)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/503.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulKahve = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulKahve)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/502.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulSoda = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulSoda)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/501.jpg")
                         {
                             a.InvokeMember("click"); return;
                         }
@@ -1232,29 +1557,31 @@ namespace SokakCeteleriGameBot
                 var thisPrison = ElementHelper.FindThisIsPrisonElement(document);
                 if (thisPrison != null)
                 {
-                    if (_hapisKacKart && Convert.ToInt16(thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].
-                    Children[0].Children[0].Children[1].InnerText) > 0)
+                    var hapiskart = ElementHelper.FindHapisKart(thisPrison);
+                    if (_hapisKacKart && Convert.ToInt16(hapiskart.FirstChild.Children[1].InnerText) > 0)
                     {
-                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                        hapiskart.InvokeMember("click"); return;
                     }
-                    else if (_hapisKacBaglanti && _baglanti >= 78)
+                    if (_hapisKacBaglanti)
                     {
-                        thisPrison.FirstChild.Children[2].Children[0].Children[2].Children[1].Children[0].Children[0].InvokeMember("click");
+                        var prisonEscape = ElementHelper.FindHapisBaglantii(thisPrison);
+                        prisonEscape.InvokeMember("click");
                         var escapeConnect = ElementHelper.FindEscapeConnectElement(webBrowser1.Document);
                         if (escapeConnect != null)
                         {
-                            escapeConnect.Children[0].Children[2].Children[0].Children[0].Children[1].Children[0].Children[0].Children[1].
-                                Children[0].Children[2].Children[0].Children[0].Children[0].InvokeMember("click"); return;
+                            var baglantiyeter = ElementHelper.FindEscapemoney(escapeConnect);
+
+                            if (Convert.ToInt32(baglantiyeter.InnerText) < _baglanti)
+                            {
+                                var connectok = ElementHelper.FindConnectEscape(escapeConnect);
+                                connectok.InvokeMember("click"); ; return;
+                            }
                         }
                     }
-                    else
+                    var topuk = ElementHelper.FindPrisonTopuk(thisPrison);
+                    if (topuk != null)
                     {
-                        if (thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
-                            FirstChild.GetAttribute("className").Contains("pad_item jail_icons jail_riot_0 json"))
-                        {
-                            thisPrison.FirstChild.Children[1].FirstChild.Children[3].FirstChild.FirstChild.
-                                FirstChild.InvokeMember("click"); return;
-                        }
+                        topuk.InvokeMember("click"); return;
                     }
                 }
                 prison.InvokeMember("click"); return;
@@ -1287,25 +1614,28 @@ namespace SokakCeteleriGameBot
             var hospital = ElementHelper.FindHospitalElement(document);
             if (hospital != null)
             {
-                if (hospital.FirstChild.Children[2].CanHaveChildren)
+                var hos = ElementHelper.FindHosElement(document);
+                if (hos != null)
                 {
-                    if (0 < Convert.ToInt16(hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.
-                                        FirstChild.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
+                    var hoskart = ElementHelper.FindHosKartElement(hos);
+                    if (0 < Convert.ToInt16(hoskart.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hoskart.InvokeMember("click"); return;
                     }
+                    else
+                    { cbHastaneKart.Checked = false; }
                     var paraYok = EnerjiElement.LowEnerjiTrainingElement(document);
                     if (paraYok != null && paraYok.Children[2].GetAttribute("className").Contains("getin b"))
                     {
                         _hastaneKartKullan = false; cbHastanePara.Checked = false;
                     }
-                    if (_hastaneParaKullan)
+                    var hemsir = ElementHelper.FindHosHemsireElement(hos);
+                    if (_hastaneParaKullan && hemsir != null)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[1].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hemsir.InvokeMember("click"); return;
                     }
                 }
-                var sokak = MenuElement.LeftMenuElement(document);
-                sokak.Children[1].FirstChild.InvokeMember("click"); return;
+                hospital.InvokeMember("click"); return;
             }
             if (_zehir + 20 >= _zehirToplam && _zehirKartKullan)
             {
@@ -1374,20 +1704,72 @@ namespace SokakCeteleriGameBot
                         }
                         else
                         {
-                            cbEnerjiKart.Checked = false;
+                            cbEnerjiKart.Checked = false; _enerjiKartKullan = false; elEnerji.InvokeMember("click");return;
                         }
                     }
                     var envanter = MenuElement.RightMenuElement(document);
                     envanter.FirstChild.InvokeMember("click"); return;
                 }
+                if (cbEnerjiSokak.Checked)
+                {
+                    var street = document.GetElementById("map");
+                    if (street != null)
+                    {
+                        var enerjiic = Saldir.Enerji(street);
+                        enerjiic.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[2].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var home = MenuElement.LeftMenuElement(document);
+                    home.Children[1].FirstChild.InvokeMember("click"); return;
+                }
                 var findDrink = EnerjiElement.FindDrinkElement(document);
                 if (findDrink != null)
                 {
-                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
-                    foreach (HtmlElement a in bul)
+                    HtmlElementCollection bulViski = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulViski)
                     {
                         string nameStr = a.GetAttribute("src");
                         if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulVodka = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulVodka)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/504.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulBira = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulBira)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/503.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulKahve = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulKahve)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/502.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulSoda = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulSoda)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/501.jpg")
                         {
                             a.InvokeMember("click"); return;
                         }
@@ -1401,18 +1783,44 @@ namespace SokakCeteleriGameBot
             var basla = document.GetElementById("map");
             if (basla != null)
             {
-                var polis = Saldir.Polis(basla);
-                if (polis != null)
+                if (!cbHapisGir.Checked)
                 {
-                    polis.InvokeMember("click");
-                    var dov = Saldir.Saldirr(webBrowser1.Document);
-                    if (dov != null)
+                    var polis = Saldir.Polis(basla);
+                    if (polis != null)
                     {
-                        dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        polis.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
                     }
                 }
+                else
+                {
+                    var polis = Saldir.Polis(basla);
+                    if (polis == null)
+                    {
+                        var polisara = ElementHelper.FindPoliceSearchElement(basla);
+                        if (polisara != null)
+                        {
+                            polisara.InvokeMember("click"); return;
+                        }
+                    }
+                }
+               
                 if (_seviye > 2)
                 {
+                    //var ajan = Saldir.Ajan(basla);
+                    //if (ajan != null)
+                    //{
+                    //    ajan.InvokeMember("click");
+                    //    var dov = Saldir.Saldirr(webBrowser1.Document);
+                    //    if (dov != null)
+                    //    {
+                    //        dov.FirstChild.Children[1].FirstChild.FirstChild.InvokeMember("click"); return;
+                    //    }
+                    //}
                     var atm = Saldir.Atm(basla);
                     if (atm != null)
                     {
@@ -1785,6 +2193,15 @@ namespace SokakCeteleriGameBot
 
         private void BilekGuresi(HtmlDocument document)
         {
+
+            if (0 < 45 - DateTime.Now.Minute)
+            {
+                StartTimer(45 - DateTime.Now.Minute,DateTime.Now.Second);
+                _game = GameOps.GorevKatil;
+                CeteGorev(document);
+                return;
+            }
+            
             if (document == null) return;
             var prison = ElementHelper.FindPrisonElement(document);
             if (prison != null)
@@ -1804,14 +2221,7 @@ namespace SokakCeteleriGameBot
                         DateTime guresSure =  Convert.ToDateTime(thisPrison.FirstChild.Children[1].FirstChild.Children[4].Children[1].Children[1].FirstChild.InnerText);
                         if (guresSure < hapisSure)
                         {
-                            StartTimer(int.Parse(guresSure.Minute.ToString()), int.Parse(guresSure.Second.ToString()));
-                            _game = GameOps.Non;
-                            return;
-                        }
-                        else
-                        {
-                            StartTimer(int.Parse(hapisSure.Minute.ToString()), int.Parse(hapisSure.Second.ToString()));  
-                            _game = GameOps.Non;
+                            StartTimer(31, 0);
                             return;
                         }
                     }
@@ -1826,39 +2236,116 @@ namespace SokakCeteleriGameBot
             var hospital = ElementHelper.FindHospitalElement(document);
             if (hospital != null)
             {
-                if (hospital.FirstChild.Children[2].CanHaveChildren)
+                var hos = ElementHelper.FindHosElement(document);
+                if (hos != null)
                 {
-                    if (0 < Convert.ToInt16(hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.
-                                        FirstChild.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
+                    var hoskart = ElementHelper.FindHosKartElement(hos);
+                    if (0 < Convert.ToInt16(hoskart.FirstChild.Children[1].InnerText) && _hastaneKartKullan)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[2].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hoskart.InvokeMember("click"); return;
                     }
+                    else
+                    { cbHastaneKart.Checked = false; }
                     var paraYok = EnerjiElement.LowEnerjiTrainingElement(document);
                     if (paraYok != null && paraYok.Children[2].GetAttribute("className").Contains("getin b"))
                     {
                         _hastaneKartKullan = false; cbHastanePara.Checked = false;
                     }
-                    if (_hastaneParaKullan)
+                    var hemsir = ElementHelper.FindHosHemsireElement(hos);
+                    if (_hastaneParaKullan && hemsir != null)
                     {
-                        hospital.FirstChild.Children[2].FirstChild.Children[1].FirstChild.FirstChild.FirstChild.InvokeMember("click"); return;
+                        hemsir.InvokeMember("click"); return;
                     }
                 }
-                var sokak = MenuElement.LeftMenuElement(document);
-                sokak.Children[1].FirstChild.InvokeMember("click"); return;
+                hospital.InvokeMember("click"); return;
             }
-            if (_enerji < 50) { _enerjiDurum = false; }
+            if (_enerji < 60) { _enerjiDurum = false; }
             if (_enerji == _enerjiToplam)
             { _enerjiDurum = true; }
             if (!_enerjiDurum)
             {
+                if (_enerjiKartKullan)
+                {
+                    var sagEnvanter = ElementHelper.FindRightInventoryElement(document);
+                    if (sagEnvanter != null)
+                    {
+                        var enerji = Material.FindEnerjiElement(sagEnvanter);
+                        if (enerji != null)
+                        {
+                            enerji.InvokeMember("click");
+                            var kullan = ElementHelper.FindLeftInventoryElement(document);
+                            kullan.FirstChild.FirstChild.FirstChild.InvokeMember("click");
+                            var ic = Material.FindUseMaterialElement(document);
+                            ic.FirstChild.Children[5].FirstChild.InvokeMember("click"); return;
+                        }
+                        else
+                        {
+                            cbEnerjiKart.Checked = false; _enerjiKartKullan = false; elEnerji.InvokeMember("click"); return;
+                        }
+                    }
+                    var envanter = MenuElement.RightMenuElement(document);
+                    envanter.FirstChild.InvokeMember("click"); return;
+                }
+                if (cbEnerjiSokak.Checked)
+                {
+                    var street = document.GetElementById("map");
+                    if (street != null)
+                    {
+                        var enerjiic = Saldir.Enerji(street);
+                        enerjiic.InvokeMember("click");
+                        var dov = Saldir.Saldirr(webBrowser1.Document);
+                        if (dov != null)
+                        {
+                            dov.FirstChild.Children[2].FirstChild.FirstChild.InvokeMember("click"); return;
+                        }
+                    }
+                    var home = MenuElement.LeftMenuElement(document);
+                    home.Children[1].FirstChild.InvokeMember("click"); return;
+                }
                 var findDrink = EnerjiElement.FindDrinkElement(document);
                 if (findDrink != null)
                 {
-                    HtmlElementCollection bul = findDrink.Document.GetElementsByTagName("img");
-                    foreach (HtmlElement a in bul)
+                    HtmlElementCollection bulViski = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulViski)
                     {
                         string nameStr = a.GetAttribute("src");
                         if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/505.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulVodka = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulVodka)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/504.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulBira = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulBira)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/503.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulKahve = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulKahve)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/502.jpg")
+                        {
+                            a.InvokeMember("click"); return;
+                        }
+                    }
+                    HtmlElementCollection bulSoda = findDrink.Document.GetElementsByTagName("img");
+                    foreach (HtmlElement a in bulSoda)
+                    {
+                        string nameStr = a.GetAttribute("src");
+                        if (nameStr == "http://v2i.streetmobster.com/srv/eu.1/item/501.jpg")
                         {
                             a.InvokeMember("click"); return;
                         }
@@ -2273,6 +2760,150 @@ namespace SokakCeteleriGameBot
             banka.Children[13].FirstChild.InvokeMember("click");return;
         }
 
+        private void CeteGorev(HtmlDocument document)
+        {
+            if (document != null)
+            {
+                var katil = document.GetElementById("c[join]");
+                var sucİsle = document.GetElementById("c[docrime]");
+                if (katil != null)
+                {
+                    katil.InvokeMember("click"); _game = GameOps.BilekGuresi; return;
+                }
+                else if (sucİsle != null)
+                {
+                    _game = GameOps.BilekGuresi; return;
+                }
+                /*  var dutyy = ElementHelper.FindDutyListElement(document);
+                  if (dutyy != null)
+                  {
+
+                  }
+                  var myGang = ElementHelper.FindMyGangElement(document);
+                  if (myGang != null)
+                  {
+                      var topMenu = MenuElement.TopMenuBankElement(document);
+                      if (topMenu.Children[2].FirstChild.InnerText== "Görevler")
+                      {
+                          topMenu.Children[2].InvokeMember("click");return;
+                      }
+                  }
+                  */
+
+                var cete = MenuElement.RightMenuElement(webBrowser1.Document);
+                cete.Children[5].InvokeMember("click"); return;
+            }
+        }
+
+        private void UserMessage(HtmlDocument document)
+        {
+            if (document == null) return;
+            var msgComp = ElementHelper.FindMessageCompleteElement(document);
+            if (msgComp != null)
+            {
+                var onlineUserr = document.GetElementById("game-time");
+                if (onlineUserr != null)
+                {
+                    onlineUserr.FirstChild.FirstChild.InvokeMember("click"); return;
+                }
+            }
+            var msgSubjectElement = document.GetElementById("msg[subject]");
+            if (msgSubjectElement != null)
+            {
+                var msgElement = document.GetElementById("msg[body]");
+                msgElement.InnerText = tbMessage.Text;
+                msgSubjectElement.InnerText = tbSubject.Text;
+                var msgSend = ElementHelper.FindMessageSendElement(document);
+                msgSend.InvokeMember("click");return;
+            }
+
+            var msgBtn = ElementHelper.FindMessageBtnElement(MenuElement.TopMenuElement(document));
+            if (msgBtn != null)
+            {
+                msgBtn.InvokeMember("click");return;
+            }
+            var profilMsgBtn = ElementHelper.FindMessageProfilBtnElement(document);
+            if (profilMsgBtn != null)
+            {
+                profilMsgBtn.InvokeMember("click");return;
+            }
+            var onlineList = ElementHelper.FindOnlineUserElement(document);
+            if (onlineList != null)
+            {
+                var users = ElementHelper.FindUserElement(onlineList);
+                if (users != null)
+                {
+                    if (users[1].FirstChild.InnerText== "1.")
+                    {
+                        _userİnt = 0;
+                    }
+                    else if (users[1].FirstChild.InnerText == "31.")
+                    {
+                        _userİnt = 30;
+                    }
+                    else if (users[1].FirstChild.InnerText == "61.")
+                    {
+                        _userİnt = 60;
+                    }
+                    else if (users[1].FirstChild.InnerText == "91.")
+                    {
+                        _userİnt = 90;
+                    }
+                    else if (users[1].FirstChild.InnerText == "121.")
+                    {
+                        _userİnt = 120;
+                    }
+                    else if (users[1].FirstChild.InnerText == "151.")
+                    {
+                        _userİnt = 150;
+                    }
+                    else if (users[1].FirstChild.InnerText == "181.")
+                    {
+                        _userİnt = 180;
+                    }
+                    else if (users[1].FirstChild.InnerText == "211.")
+                    {
+                        _userİnt = 210;
+                    }
+                    else if (users[1].FirstChild.InnerText == "241.")
+                    {
+                        _userİnt = 240;
+                    }
+                    foreach (HtmlElement a in users)
+                    {
+                        if (a.FirstChild.InnerText != "#")
+                        {
+                            if (_userNames[_userİnt] == null)
+                            {
+                                _userNames[_userİnt] = a.Children[1].FirstChild.InnerText;
+                                cbUserMsgSend.Items.Add(_userNames[_userİnt]);
+                                a.Children[1].FirstChild.InvokeMember("click"); return;
+                            }
+                            _userİnt++;
+                        }
+                    }
+                    if (_userİnt >= 29)
+                    {
+                        var msgNextBtn = ElementHelper.FindMessageNextBtnElement(ElementHelper.FindMessageNextElement(document));
+                        if (msgNextBtn != null)
+                        {
+                            if (msgNextBtn.GetAttribute("className").Contains("next_disabled"))
+                            {
+                                MessageBox.Show("bitti"); return;
+                            }
+                            msgNextBtn.InvokeMember("click"); return;
+                        }
+                    }
+                  //  _msgİnt++;  
+                }
+            }
+            var onlineUser = document.GetElementById("game-time");
+            if (onlineUser != null)
+            {
+                onlineUser.FirstChild.FirstChild.InvokeMember("click"); return;
+            }
+        }
+
         private IScheduler Baslat()
         {
             ISchedulerFactory schedFact = new StdSchedulerFactory();
@@ -2281,6 +2912,7 @@ namespace SokakCeteleriGameBot
                 sched.Start();
             return sched;
         }
+
         private void GoreviTetikle(DateTime baslamaZamani)
         {
             IScheduler sched = Baslat();

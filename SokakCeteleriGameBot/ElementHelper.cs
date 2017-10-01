@@ -323,6 +323,54 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement FindPoliceSearchElement(HtmlElement document)
+        {
+            Random rastgele = new Random();
+            int rast = rastgele.Next(8);
+            var elements = document.GetElementsByTagName("div");
+
+                        var abc = document.GetElementsByTagName("a");
+                        if (abc != null)
+                        {
+                            foreach (HtmlElement a in abc)
+                            {
+                                if (rast == 0 && a.GetAttribute("className").Contains("north"))
+                                {
+                                    return a;
+                                }
+                                else if (rast == 1 && a.GetAttribute("className").Contains("north-east"))
+                                {
+                                    return a;
+                                }
+                                else if (rast == 2 && a.GetAttribute("className").Contains("east"))
+                                {
+                                    return a;
+                                }
+                                else if (rast == 3 && a.GetAttribute("className").Contains("south-east"))
+                                {
+                                    return a;
+                                }
+                                else if (rast == 4 && a.GetAttribute("className").Contains("south"))
+                                {
+                                    return a;
+                                }
+                                else if (rast == 5 && a.GetAttribute("className").Contains("south-west"))
+                                {
+                                    return a;
+                                }
+                                else if (rast == 6 && a.GetAttribute("className").Contains("west"))
+                                {
+                                    return a;
+                                }
+                                else if (rast == 7 && a.GetAttribute("className").Contains("north-west"))
+                                {
+                                    return a;
+                                }
+                            }
+                        }
+            return null;
+        }
+
         public static HtmlElement FindPoliceElement(HtmlDocument document)
         {
             var elements = document.GetElementById("arrested");
@@ -353,6 +401,57 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement FindHapisKart(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("pad_item json"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindHapisBaglantii(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("pad_item buy_extra jail_icons jail_bribe json"))
+                { return e; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindConnectEscape(HtmlElement document)
+        {
+            int i = 0;
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("pad_item jail_icons jail_bribe json"))
+                {
+                    i++;
+                    if (i == 3)
+                    {
+                        return e;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindPrisonTopuk(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement e in elements)
+            {
+                if (e.GetAttribute("className").Contains("pad_item jail_icons jail_riot_0 json"))
+                { return e; }
+            }
+            return null;
+        }
+
         public static HtmlElement FindEscapeConnectElement(HtmlDocument document)
         {
             var elements = document.GetElementById("window-modal-extra");
@@ -361,14 +460,236 @@ namespace SokakCeteleriGameBot
             return null;
         }
 
+        public static HtmlElement FindEscapemoney(HtmlElement document)
+        {
+            int i = 0;
+            var elements = document.GetElementsByTagName("span");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("connections"))
+                {
+                    i++;
+                    if (i == 3)
+                    {
+                        return a;
+                    }   
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindCreditElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("span");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("credit-info-new"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindMyGangElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("body  mygang"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindDutyListElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("table");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("gcrime_list"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindOnlineUserElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("modfadeonline"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindNoGangElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("body enemygang"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElementCollection FindUserElement(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("tr");
+            if (elements != null)
+                { return elements; }
+            return null;
+        }
+
+        public static HtmlElement FindMessageElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("quick-msg"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindMessageBtnElement(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.FirstChild.InnerText== "Mesaj Yaz")
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindMessageProfilBtnElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("mailbox btn"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindMessageSendElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("input");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("btn send"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindMessageNextElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("page_bar"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindMessageNextBtnElement(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("next"))
+                { return a; }
+            }
+            var element = document.GetElementsByTagName("span");
+            foreach (HtmlElement e in element)
+            {
+                if (e.GetAttribute("className").Contains("next_disabled"))
+                {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindGangGoElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("body"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindMessageCompleteElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("minfo"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindGangBodyElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("h1");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("inline"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindHosElement(HtmlDocument document)
+        {
+            var elements = document.GetElementsByTagName("div");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("modhospital"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindHosKartElement(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("pad_item json"))
+                { return a; }
+            }
+            return null;
+        }
+
+        public static HtmlElement FindHosHemsireElement(HtmlElement document)
+        {
+            var elements = document.GetElementsByTagName("a");
+            foreach (HtmlElement a in elements)
+            {
+                if (a.GetAttribute("className").Contains("pad_item hospital_nurse json"))
+                { return a; }
+            }
+            return null;
+        }
+
         public static HtmlElement FindHospitalElement(HtmlDocument document)
         {
             var elements = document.GetElementsByTagName("div");
             foreach (HtmlElement e in elements)
             {
-                if (e.GetAttribute("className").Contains("modhospital"))
-                {return e;}
+                if ((e.GetAttribute("className").Contains("user-box u-er utt") || (e.GetAttribute("className").Contains("user-box vip-er utt")) && e.Children[1].FirstChild.InnerText == "Hastanede"))
+                { return e.Children[1].FirstChild; }
             }
+            
             return null;
         }
 
